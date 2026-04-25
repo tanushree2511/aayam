@@ -22,17 +22,17 @@ const NotFound = () => {
           </div>
           <CardTitle className="font-display text-4xl font-bold text-foreground">404</CardTitle>
           <CardDescription className="text-base text-muted-foreground">
-            {t('This page could not be found.', 'यो पृष्ठ फेला परेन।')}
+            {t('This page could not be found.', 'यह पृष्ठ नहीं मिला।')}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-3 pt-2">
           <p className="text-center text-sm text-muted-foreground">
-            {t('The link may be broken or the page was moved.', 'लिङ्क बिग्रिएको हुन सक्छ वा पृष्ठ सारिएको हुन सक्छ।')}
+            {t('The link may be broken or the page was moved.', 'लिंक टूटा हो सकता है या पृष्ठ ले जाया गया होगा।')}
           </p>
           <Button asChild className="btn-hero w-full gap-2 rounded-full">
             <Link to="/">
               <Home className="h-4 w-4" />
-              {t('Return to Home', 'गृहपृष्ठमा फर्कनुहोस्')}
+              {t('Return to Home', 'होम पर वापस जाएं')}
             </Link>
           </Button>
         </CardContent>

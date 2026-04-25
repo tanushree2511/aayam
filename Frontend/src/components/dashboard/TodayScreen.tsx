@@ -11,49 +11,49 @@ import { MOOD_HEX, moodHeroGradient } from '@/lib/moodTheme';
 const TIER1_CHOICES = (t: (en: string, ne: string) => string) => [
   {
     id: 'color',
-    category: t('Colour', 'रङ'),
-    question: t('What color did your day begin with?', 'आज तपाईंको दिन कुन रङमा सुरु भयो?'),
+    category: t('Colour', 'रंग'),
+    question: t('What color did your day begin with?', 'आज आपका दिन किस रंग से शुरू हुआ?'),
     type: 'colors' as const,
-    why: t('One decision at a time reduces pressure. Clear options stabilise an exhausted nervous system.', 'एक पटकमा एउटा निर्णयले दबाब घटाउँछ। स्पष्ट विकल्पहरूले थकित स्नायु प्रणालीलाई स्थिर बनाउँछन्।'),
+    why: t('One decision at a time reduces pressure. Clear options stabilise an exhausted nervous system.', 'एक समय में एक निर्णय दबाव को कम करता है। स्पष्ट विकल्प थके हुए तंत्रिका तंत्र को स्थिर करते हैं।'),
   },
   {
     id: 'sound',
     category: t('Sound', 'ध्वनि'),
-    question: t('What sound do you want to wake up to tomorrow?', 'भोलि बिहान कुन आवाज सुन्न चाहनुहुन्छ?'),
+    question: t('What sound do you want to wake up to tomorrow?', 'कल आप किस आवाज़ के साथ उठना चाहेंगे?'),
     type: 'options' as const,
     options: [
-      { value: 'rain',  label: t('Rain 🌧️', 'वर्षाको आवाज 🌧️') },
-      { value: 'bells', label: t('Temple Bells 🔔', 'मन्दिरको घण्टी 🔔') },
-      { value: 'birds', label: t('Birdsong 🐦', 'चराको चिरबिर 🐦') },
+      { value: 'rain',  label: t('Rain 🌧️', 'बारिश की आवाज़ 🌧️') },
+      { value: 'bells', label: t('Temple Bells 🔔', 'मंदिर की घंटी 🔔') },
+      { value: 'birds', label: t('Birdsong 🐦', 'पक्षियों की चहचहाहट 🐦') },
     ],
-    why: t('Choosing a sound gives your senses a safe anchor.', 'आवाजको छनौटले इन्द्रियहरूलाई सुरक्षित महसुस गराउँछ।'),
+    why: t('Choosing a sound gives your senses a safe anchor.', 'एक ध्वनि चुनने से आपकी इंद्रियों को एक सुरक्षित सहारा मिलता है।'),
   },
   {
     id: 'word',
     category: t('Word', 'शब्द'),
-    question: t('Describe your morning in one word.', 'आजको बिहानलाई एक शब्दमा भन्नुहोस्।'),
+    question: t('Describe your morning in one word.', 'अपनी सुबह का वर्णन एक शब्द में करें।'),
     type: 'text' as const,
-    placeholder: t('One word only...', 'एक शब्द मात्र...'),
-    why: t('Naming your experience means understanding it. This calms the mind.', 'आफ्नो अनुभवलाई नाम दिनु भनेको त्यसलाई बुझ्नु हो। यो मस्तिष्कलाई शान्त बनाउँछ।'),
+    placeholder: t('One word only...', 'बस एक शब्द...'),
+    why: t('Naming your experience means understanding it. This calms the mind.', 'अपने अनुभव को नाम देने का अर्थ है उसे समझना। यह मन को शांत करता है।'),
   },
   {
     id: 'pace',
     category: t('Pace', 'गति'),
-    question: t('How do you want today to feel?', 'आज कस्तो दिन महसुस हुनु परेको छ?'),
+    question: t('How do you want today to feel?', 'आज का दिन कैसा महसूस होना चाहिए?'),
     type: 'options' as const,
     options: [
-      { value: 'quiet',  label: t('Quiet 🌿', 'शान्त 🌿') },
+      { value: 'quiet',  label: t('Quiet 🌿', 'शांत 🌿') },
       { value: 'active', label: t('Active ⚡', 'सक्रिय ⚡') },
     ],
-    why: t('Choosing your own pace is the first step to self-control.', 'आफ्नो गतिलाई आफैले छान्नु भनेको आत्म-नियन्त्रणको पहिलो कदम हो।'),
+    why: t('Choosing your own pace is the first step to self-control.', 'अपनी गति खुद चुनना आत्म-नियंत्रण की ओर पहला कदम है।'),
   },
   {
     id: 'intention',
     category: t('Intention', 'इरादा'),
-    question: t('One small thing only for yourself today.', 'आज केवल आफ्नो लागि एउटा काम के गर्नुहुन्छ?'),
+    question: t('One small thing only for yourself today.', 'आज सिर्फ अपने लिए एक छोटी सी चीज़।'),
     type: 'text' as const,
-    placeholder: t('Just for me...', 'आफ्नो लागि मात्र...'),
-    why: t('Thinking "for myself" is powerful. This small intention builds self-worth.', '"आफ्नो लागि" भन्ने सोच्नु शक्तिशाली छ। यो सानो इरादाले आत्म-सम्मान बढाउँछ।'),
+    placeholder: t('Just for me...', 'सिर्फ मेरे लिए...'),
+    why: t('Thinking "for myself" is powerful. This small intention builds self-worth.', '"अपने लिए" सोचना शक्तिशाली है। यह छोटा सा इरादा आत्म-सम्मान बढ़ाता है।'),
   },
 ];
 
@@ -153,7 +153,7 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
       <div
         className="min-h-[320px] rounded-[20px] bg-muted/25 animate-pulse"
         aria-busy="true"
-        aria-label={t('Loading your progress', 'प्रगति लोड हुँदैछ')}
+        aria-label={t('Loading your progress', 'आपकी प्रगति लोड हो रही है')}
       />
     );
   }
@@ -190,21 +190,21 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
         >
           {/* Left: title */}
           <div className="min-w-0 w-full flex-1 sm:min-w-[220px]">
-            <p style={{ fontSize: 11, color: '#9a8e84', letterSpacing: '0.08em', marginBottom: 6 }}>{t('Daily Restoration', 'आजको पुनर्स्थापना')}</p>
+            <p style={{ fontSize: 11, color: '#9a8e84', letterSpacing: '0.08em', marginBottom: 6 }}>{t('Daily Restoration', 'दैनिक पुनर्स्थापना')}</p>
             <h1 style={{ fontFamily: 'Playfair Display, serif', fontSize: 'clamp(1.8rem, 4vw, 2.4rem)', color: '#2d2520', margin: 0, lineHeight: 1.2 }}>
-              {t("Today's 5 Choices", 'आजको ५ छनौट')}
+              {t("Today's 5 Choices", 'आज के ५ चुनाव')}
             </h1>
             <p style={{ fontSize: 13, color: '#7a6e66', marginTop: 10, maxWidth: 320, lineHeight: 1.6 }}>
-              {t('Short, clear, safe decisions ground the mind today.', 'छोटो, स्पष्ट, र सुरक्षित निर्णयहरूले आज मस्तिष्कलाई थकित होइन, स्थिर बनाउँछन्।')}
+              {t('Short, clear, safe decisions ground the mind today.', 'छोटे, स्पष्ट, और सुरक्षित निर्णय मन को स्थिरता देते हैं।')}
             </p>
           </div>
 
           {/* Right: info cards */}
           <div className="flex w-full min-w-0 flex-col gap-2.5 sm:w-auto sm:min-w-[200px]">
             {[
-              { icon: '✦', label: t('Today', 'आजको दिन'), value: `${t('Day', 'दिन')} ${dayCount}` },
-              { icon: '○', label: t('Done', 'सम्पन्न'),   value: `${done ? 5 : step}/5` },
-              { icon: '◎', label: t('Tier', 'स्तर'),      value: `${t('Tier', 'तह')} ${tier}` },
+              { icon: '✦', label: t('Today', 'आज का दिन'), value: `${t('Day', 'दिन')} ${dayCount}` },
+              { icon: '○', label: t('Done', 'पूरा हुआ'),   value: `${done ? 5 : step}/5` },
+              { icon: '◎', label: t('Tier', 'स्तर'),      value: `${t('Tier', 'स्तर')} ${tier}` },
             ].map(card => (
               <div
                 key={card.label}
@@ -397,7 +397,7 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
                           transition: 'background 200ms',
                         }}
                       >
-                        {t('Next →', 'अगाडि →')}
+                        {t('Next →', 'आगे →')}
                       </button>
                     </div>
                   )}
@@ -414,7 +414,7 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
                     margin: '0 0 14px',
                   }}
                 >
-                  {t('5 Decisions. Yours. Today.', '५ निर्णय। तपाईंका। आज।')}
+                  {t('5 Decisions. Yours. Today.', '५ निर्णय। आपके। आज।')}
                 </p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: 10 }}>
                   {[0, 1, 2, 3, 4].map((i) => (
@@ -440,20 +440,20 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
           style={{ background: 'var(--card, #fff)' }}
         >
           <p style={{ fontSize: 12, fontWeight: 600, color: '#8a7d72', letterSpacing: '0.1em', marginBottom: 10 }}>
-            {t('Why this?', 'किन यसरी?')}
+            {t('Why this?', 'ऐसा क्यों?')}
           </p>
           <p style={{ fontSize: 15, color: '#4a4039', lineHeight: 1.7, margin: 0 }}>
             {done
               ? t(
                   'You made 5 decisions today. This small sequence gives your mind stability.',
-                  'तपाईंले आज ५ निर्णय लिनुभयो। यो सानो क्रमले तपाईंको मस्तिष्कलाई स्थिरता दिन्छ।',
+                  'आपने आज ५ निर्णय लिए। यह छोटा सा क्रम आपके मन को स्थिरता देता है।',
                 )
-              : current.why ?? t('One decision at a time reduces pressure.', 'एक पटकमा एउटा निर्णयले दबाब घटाउँछ।')}
+              : current.why ?? t('One decision at a time reduces pressure.', 'एक समय में एक निर्णय दबाव को कम करता है।')}
           </p>
           {!done && (
             <div style={{ marginTop: 'auto', paddingTop: '1.25rem' }}>
               <div style={{ padding: '1rem', background: 'linear-gradient(180deg, #fdf9f6 0%, #faf6f2 100%)', borderRadius: 12, border: '1px solid #f0e8e0' }}>
-                <p style={{ fontSize: 11, fontWeight: 600, color: '#a8988c', letterSpacing: '0.08em', marginBottom: 8 }}>{t("Today's path", 'आजको बाटो')}</p>
+                <p style={{ fontSize: 11, fontWeight: 600, color: '#a8988c', letterSpacing: '0.08em', marginBottom: 8 }}>{t("Today's path", 'आज का रास्ता')}</p>
                 <div style={{ display: 'flex', gap: 8 }}>
                   {[0, 1, 2, 3, 4].map((i) => (
                     <div
@@ -469,7 +469,7 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
                   ))}
                 </div>
                 <p style={{ fontSize: 13, fontWeight: 500, color: '#6b5f56', marginTop: 10 }}>
-                  {step} / 5 {t('done', 'पूरा भयो')}
+                  {step} / 5 {t('done', 'पूरा हुआ')}
                 </p>
               </div>
             </div>

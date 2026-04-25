@@ -21,7 +21,7 @@ const LandingPage = () => {
   return (
     <div
       className="landing-public min-h-screen"
-      lang={language === 'ne' ? 'ne' : 'en'}
+      lang={language === 'hi' ? 'hi' : 'en'}
       style={{
         background: LP.bg,
         fontFamily: "'DM Sans', sans-serif",
@@ -56,8 +56,8 @@ const LandingPage = () => {
           }}
         >
           {t(
-            'Built for Nepali Women · नेपाली महिलाका लागि बनाइएको',
-            'नेपाली महिलाका लागि बनाइएको · Built for Nepali Women',
+            'Built for Indian Women · भारतीय महिलाओं के लिए निर्मित',
+            'भारतीय महिलाओं के लिए निर्मित · Built for Indian Women',
           )}
         </div>
 
@@ -75,7 +75,7 @@ const LandingPage = () => {
                 marginBottom: 32,
               }}
             >
-              {t('Together — सँगै', 'सँगै — Together')}
+              {t('Together — साथ में', 'साथ में — Together')}
             </span>
 
             <h1
@@ -87,9 +87,9 @@ const LandingPage = () => {
                 margin: 0,
               }}
             >
-              {t("You're not", 'तपाईं एक्लो')}
+              {t("You're not", 'आप अकेली')}
               <br />
-              {t('alone.', 'हुनुहुन्न।')}
+              {t('alone.', 'नहीं हैं।')}
             </h1>
 
             <p
@@ -102,8 +102,8 @@ const LandingPage = () => {
               }}
             >
               {t(
-                'A warm companion for Nepali women — in your language, at your pace, without judgment.',
-                'नेपाली महिलाका लागि न्यानो साथी — तपाईंको भाषामा, तपाईंको गतिमा, बिना निर्णय।',
+                'A warm companion for Indian women — in your language, at your pace, without judgment.',
+                'भारतीय महिलाओं के लिए एक स्नेही साथी — आपकी भाषा में, आपकी गति से, बिना किसी फैसले के।',
               )}
             </p>
 
@@ -116,7 +116,7 @@ const LandingPage = () => {
                 marginTop: 8,
               }}
             >
-              {t('Not a doctor. Not a lawyer. Just — a friend.', 'न डाक्टर। न वकिल। बस — साथी।')}
+              {t('Not a doctor. Not a lawyer. Just — a friend.', 'न डॉक्टर। न वकील। बस — एक दोस्त।')}
             </p>
 
             <div className="flex flex-wrap justify-center" style={{ marginTop: 36, gap: 12 }}>
@@ -140,7 +140,7 @@ const LandingPage = () => {
                   e.currentTarget.style.background = LP.terracotta;
                 }}
               >
-                {t('Get Started → — सुरु गरौं', 'सुरु गरौं — Get Started →')}
+                {t('Get Started → — शुरू करें', 'शुरू करें — Get Started →')}
               </Link>
               <a
                 href="#landing-reality"
@@ -162,7 +162,7 @@ const LandingPage = () => {
                   e.currentTarget.style.background = 'transparent';
                 }}
               >
-                {t('Learn More', 'थप जान्नुहोस्')}
+                {t('Learn More', 'और जानें')}
               </a>
             </div>
 
@@ -171,10 +171,10 @@ const LandingPage = () => {
               style={{ marginTop: 20, gap: 28 }}
             >
               {[
-                ['Private by design', 'गोप्य डिजाइन'],
-                ['Built for Nepal', 'नेपालको लागि'],
-                ['Warm, not clinical', 'न्यानो, औपचारिक होइन'],
-              ].map(([en, ne]) => (
+                ['Private by design', 'गोपनीय डिज़ाइन'],
+                ['Built for India', 'भारत के लिए निर्मित'],
+                ['Warm, not clinical', 'स्नेही, औपचारिक नहीं'],
+              ].map(([en, hi]) => (
                 <div
                   key={en}
                   className="flex items-center"
@@ -185,7 +185,7 @@ const LandingPage = () => {
                     style={{ width: 6, height: 6, background: LP.terracotta }}
                     aria-hidden
                   />
-                  {t(en, ne)}
+                  {t(en, hi)}
                 </div>
               ))}
             </div>
@@ -253,7 +253,7 @@ const LandingPage = () => {
             maxWidth: 560,
           }}
         >
-          {t('Why Sangai exists.', 'सङ्गै किन छ।')}
+          {t('Why Mitra exists.', 'मित्र क्यों मौजूद है।')}
         </h2>
 
         <div
@@ -270,13 +270,13 @@ const LandingPage = () => {
             }}
           >
             <p className="font-display font-normal" style={{ fontSize: 48, color: LP.terracotta, margin: 0 }}>
-              35%
+              30%
             </p>
             <p style={{ fontSize: 13, color: LP.muted, marginTop: 4 }}>
-              {t('of Nepali women', 'नेपाली महिलामध्ये')}
+              {t('of Indian women', 'भारतीय महिलाओं में से')}
             </p>
             <p style={{ fontSize: 12, color: LP.muted, marginTop: 4, opacity: 0.9 }}>
-              {t('experience domestic violence', 'घरेलु हिंसा भोग्छन्')}
+              {t('experience domestic violence', 'घरेलू हिंसा का अनुभव करती हैं')}
             </p>
             <span
               className="inline-block"
@@ -289,7 +289,7 @@ const LandingPage = () => {
                 marginTop: 12,
               }}
             >
-              Nepal DHS, 2022
+              NFHS-5 India, 2021
             </span>
           </div>
 
@@ -303,14 +303,14 @@ const LandingPage = () => {
             }}
           >
             <p className="font-display font-normal leading-none" style={{ margin: 0, color: LP.terracotta }}>
-              <span style={{ fontSize: 48 }}>2.8</span>
+              <span style={{ fontSize: 48 }}>3.5</span>
               <span style={{ fontSize: 20 }}> {t('yrs', 'वर्ष')}</span>
             </p>
             <p style={{ fontSize: 13, color: LP.muted, marginTop: 8 }}>
               {t('average court wait', 'औसत अदालती प्रतीक्षा')}
             </p>
             <p style={{ fontSize: 12, color: LP.muted, marginTop: 4, opacity: 0.9 }}>
-              {t('with zero mental health support', 'मानसिक स्वास्थ्य सहयोग बिना')}
+              {t('with zero mental health support', 'बिना किसी मानसिक स्वास्थ्य सहायता के')}
             </p>
             <span
               className="inline-block"
@@ -323,7 +323,7 @@ const LandingPage = () => {
                 marginTop: 12,
               }}
             >
-              ILO, 2022
+              National Judicial Data
             </span>
           </div>
 
@@ -337,14 +337,14 @@ const LandingPage = () => {
             }}
           >
             <p className="font-display font-normal leading-none" style={{ margin: 0, color: LP.terracotta }}>
-              <span style={{ fontSize: 48 }}>0.22</span>
+              <span style={{ fontSize: 48 }}>0.75</span>
               <span style={{ fontSize: 14 }}> {t('per 100K', 'प्रति १ लाख')}</span>
             </p>
             <p style={{ fontSize: 13, color: LP.muted, marginTop: 8 }}>
-              {t('psychiatrists in Nepal', 'नेपालमा मनोचिकित्सक')}
+              {t('psychiatrists in India', 'भारत में मनोचिकित्सक')}
             </p>
             <p style={{ fontSize: 12, color: LP.muted, marginTop: 4, opacity: 0.9 }}>
-              {t('the support gap is real and systemic', 'सहयोगको खाडल वास्तविक र संरचनात्मक छ')}
+              {t('the support gap is real and systemic', 'सहायता की कमी वास्तविक और प्रणालीगत है')}
             </p>
             <span
               className="inline-block"
@@ -375,13 +375,13 @@ const LandingPage = () => {
               color: LP.terracotta,
             }}
           >
-            {t('INSIDE SANGAI', 'सङ्गै भित्र')}
+            {t('INSIDE MITRA', 'मित्र के अंदर')}
           </p>
           <h2
             className="font-display text-center font-normal"
             style={{ fontSize: 36, color: LP.text, marginTop: 12 }}
           >
-            {t("Everything she needs. Nothing she doesn't.", 'उनलाई चाहिने सबै। नचाहिने केही पनि होइन।')}
+            {t("Everything she needs. Nothing she doesn't.", 'उसे जो कुछ भी चाहिए। अनावश्यक कुछ नहीं।')}
           </h2>
 
           <div
@@ -415,12 +415,12 @@ const LandingPage = () => {
                 </svg>
               </div>
               <h3 className="font-medium" style={{ fontSize: 15, color: LP.text }}>
-                {t('Five daily choices', '५ दैनिक छनौट')}
+                {t('Five daily choices', '५ दैनिक विकल्प')}
               </h3>
               <p style={{ fontSize: 13, color: LP.muted, lineHeight: 1.6, marginTop: 8 }}>
                 {t(
                   'Five micro-choices daily that rebuild your sense of agency — backed by clinical research.',
-                  'हरेक दिन पाँच साना छनौटले तपाईंको अधिकारको भावना फेरि बनाउँछ — क्लिनिकल अनुसन्धानद्वारा समर्थित।',
+                  'हर दिन पांच छोटे विकल्प जो आपकी क्षमता को फिर से बनाते हैं — क्लिनिकल शोध द्वारा समर्थित।',
                 )}
               </p>
             </article>
@@ -443,12 +443,12 @@ const LandingPage = () => {
                 </svg>
               </div>
               <h3 className="font-medium" style={{ fontSize: 15, color: LP.text }}>
-                {t('Sangai Chat', 'सङ्गै च्याट')}
+                {t('Mitra Chat', 'मित्र चैट')}
               </h3>
               <p style={{ fontSize: 13, color: LP.muted, lineHeight: 1.6, marginTop: 8 }}>
                 {t(
-                  'A warm didi who speaks colloquial Nepali, listens first, and never judges.',
-                  'बोलचालको नेपाली बोल्ने न्यानो दिदी — पहिले सुन्छिन्, कहिल्यै निर्णय गर्दैनन्।',
+                  'A warm companion who speaks colloquial Hindi, listens first, and never judges.',
+                  'एक स्नेही साथी जो आम हिंदी बोलती हैं, पहले सुनती हैं, और कभी फैसला नहीं सुनातीं।',
                 )}
               </p>
             </article>
@@ -475,7 +475,7 @@ const LandingPage = () => {
               <p style={{ fontSize: 13, color: LP.muted, lineHeight: 1.6, marginTop: 8 }}>
                 {t(
                   'Practical steps for safety — not clinical, but real and immediately useful.',
-                  'सुरक्षाका लागि व्यावहारिक कदम — औपचारिक होइन, तुरुन्त उपयोगी।',
+                  'सुरक्षा के लिए व्यावहारिक कदम — औपचारिक नहीं, बल्कि वास्तविक और तुरंत उपयोगी।',
                 )}
               </p>
             </article>
@@ -498,12 +498,12 @@ const LandingPage = () => {
                 </svg>
               </div>
               <h3 className="font-medium" style={{ fontSize: 15, color: LP.text }}>
-                {t('Legal Rights', 'कानुनी अधिकार')}
+                {t('Legal Rights', 'कानूनी अधिकार')}
               </h3>
               <p style={{ fontSize: 13, color: LP.muted, lineHeight: 1.6, marginTop: 8 }}>
                 {t(
-                  "Your rights under Nepal's Domestic Violence Act — in plain Nepali, not legal jargon.",
-                  'घरेलु हिंसा विरुद्धको ऐन अन्तर्गत तपाईंका अधिकार — सरल नेपालीमा, कानुनी जटिल शब्द बिना।',
+                  "Your rights under India's Domestic Violence Act — in plain Hindi, not legal jargon.",
+                  'घरेलू हिंसा अधिनियम के तहत आपके अधिकार — सरल हिंदी में, कानूनी शब्दों के बिना।',
                 )}
               </p>
             </article>
@@ -526,12 +526,12 @@ const LandingPage = () => {
                 </svg>
               </div>
               <h3 className="font-medium" style={{ fontSize: 15, color: LP.text }}>
-                {t('NGO & Therapist', 'एनजीओ र थेरापिस्ट')}
+                {t('NGO & Therapist', 'एनजीओ और थेरेपिस्ट')}
               </h3>
               <p style={{ fontSize: 13, color: LP.muted, lineHeight: 1.6, marginTop: 8 }}>
                 {t(
                   'Connect with verified NGOs and mental health professionals in your district.',
-                  'तपाईंको जिल्लामा प्रमाणित एनजीओ र मानसिक स्वास्थ्य पेशेवरसँग जोडिनुहोस्।',
+                  'अपने जिले में सत्यापित एनजीओ और मानसिक स्वास्थ्य पेशेवरों से जुड़ें।',
                 )}
               </p>
             </article>
@@ -553,12 +553,12 @@ const LandingPage = () => {
                 </svg>
               </div>
               <h3 className="font-medium" style={{ fontSize: 15, color: LP.text }}>
-                {t('Early Detection', 'प्रारम्भिक पहिचान')}
+                {t('Early Detection', 'प्रारंभिक पहचान')}
               </h3>
               <p style={{ fontSize: 13, color: LP.muted, lineHeight: 1.6, marginTop: 8 }}>
                 {t(
                   'Behavioral AI that notices when you need support — before you can name it yourself.',
-                  'तपाईंलाई सहयोग चाहिने बेला थाहा पाउने व्यवहारिक AI — तपाईं आफैले नाम दिनु अघि नै।',
+                  'व्यवहार संबंधी एआई जो आपको सहायता की आवश्यकता होने पर पहचान लेता है — इससे पहले कि आप खुद इसे बता सकें।',
                 )}
               </p>
             </article>
@@ -578,11 +578,11 @@ const LandingPage = () => {
           >
             {t(
               "She didn't come because she identified herself as someone who needs mental health help. She came because she just wanted someone to talk to.",
-              'उनी मानसिक स्वास्थ्य मद्दत चाहिने व्यक्ति भएर आइनन्। उनी आइन् किनभने उनलाई कसैसँग कुरा गर्न मात्र चाहिएको थियो।',
+              'वह इसलिए नहीं आई क्योंकि उसने खुद को ऐसे व्यक्ति के रूप में पहचाना जिसे मानसिक स्वास्थ्य सहायता की आवश्यकता है। वह इसलिए आई क्योंकि उसे बस बात करने के लिए कोई चाहिए था।',
             )}
           </blockquote>
           <p style={{ fontSize: 13, color: LP.quoteAttribution, marginTop: 24 }}>
-            {t('— The design principle behind Sangai', '— सङ्गैको डिजाइन सिद्धान्त')}
+            {t('— The design principle behind Mitra', '— मित्र का डिज़ाइन सिद्धांत')}
           </p>
         </div>
       </section>
@@ -603,15 +603,15 @@ const LandingPage = () => {
             draggable={false}
           />
           <h2 className="font-display font-normal" style={{ fontSize: 38, color: LP.text }}>
-            {t('Ready?', 'तयार हुनुहुन्छ?')}
+            {t('Ready?', 'तैयार हैं?')}
           </h2>
           <p style={{ fontSize: 16, color: LP.muted, marginTop: 8 }}>
-            {t('Ready when you are. No pressure.', 'तपाईं तयार हुँदा। कुनै दबाब छैन।')}
+            {t('Ready when you are. No pressure.', 'जब आप तैयार हों। कोई दबाव नहीं।')}
           </p>
           <p style={{ fontSize: 13, color: LP.terracotta, marginTop: 4, fontStyle: 'italic' }}>
             {t(
               'Anonymous entry available — no real name required.',
-              'गोप्य प्रवेश — वास्तविक नाम अनिवार्य छैन।',
+              'गुमनाम प्रवेश उपलब्ध — असली नाम की आवश्यकता नहीं।',
             )}
           </p>
           <div className="flex justify-center" style={{ marginTop: 32 }}>
@@ -635,18 +635,18 @@ const LandingPage = () => {
                 e.currentTarget.style.background = LP.terracotta;
               }}
             >
-              {t('Begin → — सुरु गरौं', 'सुरु गरौं — Begin →')}
+              {t('Begin → — शुरू करें', 'शुरू करें — Begin →')}
             </Link>
           </div>
           <div
             className="flex flex-wrap justify-center"
             style={{ marginTop: 16, gap: 20, fontSize: 11, color: LP.mutedBadge }}
           >
-            <span>{t('Free to use', 'निःशुल्क')}</span>
+            <span>{t('Free to use', 'मुफ़्त')}</span>
             <span aria-hidden>·</span>
-            <span>{t('Works in Nepali', 'नेपालीमा काम गर्छ')}</span>
+            <span>{t('Works in Hindi', 'हिंदी में काम करता है')}</span>
             <span aria-hidden>·</span>
-            <span>{t('Private by design', 'गोप्य डिजाइन')}</span>
+            <span>{t('Private by design', 'गोपनीय डिज़ाइन')}</span>
           </div>
         </div>
       </section>
@@ -661,7 +661,7 @@ const LandingPage = () => {
           background: 'white',
         }}
       >
-        {t('Sangai · Together · Made with care for Nepal by Yadriksha, Pema, Prishika, Bikash and Sujit· 2026', 'सङ्गै · नेपालको लागि हेरविचार साथ · २०२६')}
+        {t('Mitra· Together · Made with care for India · 2026', ' मित्र · साथ में · भारत के लिए देखभाल के साथ निर्मित · २०२६')}
       </footer>
     </div>
   );

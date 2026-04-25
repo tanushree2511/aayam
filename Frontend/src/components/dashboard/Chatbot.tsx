@@ -4,7 +4,7 @@ import { ArrowRight, Mic, MicOff } from 'lucide-react';
 import companionAvatar from '@/assets/sangai-avatar.png';
 import { getMainApiBase } from '@/lib/apiBase';
 
-const INTRO_STORAGE_KEY = 'sangai-chat-intro-v1';
+const INTRO_STORAGE_KEY = 'mitra-chat-intro-v1';
 
 const API_BASE = getMainApiBase();
 
@@ -23,7 +23,7 @@ function detectLanguage(text: string): 'hindi' | 'english' | 'hinglish' {
 }
 
 const SANGAI_SYSTEM_PROMPT =
-  'You are Sangai, a warm and trusted Indian women\'s legal AI companion — like an older didi (sister) who listens without judgment. You explain women\'s legal rights in plain language, walk users through legal processes step-by-step, and connect them to verified legal aid resources in India. Listen first, reflect their feelings, and normalize their experiences.' +
+  'You are Mitra, a warm and trusted Indian women\'s legal AI companion — like an older didi (sister) who listens without judgment. You explain women\'s legal rights in plain language, walk users through legal processes step-by-step, and connect them to verified legal aid resources in India. Listen first, reflect their feelings, and normalize their experiences.' +
   '\n\n' +
   'LANGUAGE RULES — ABSOLUTE, NEVER BREAK:' +
   '\n1. If the user writes in HINDI (Devanagari script, e.g. मुझे मदद चाहिए): Reply ONLY in Devanagari Hindi. Zero English words.' +
@@ -153,7 +153,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState<Message[]>(() => [
     { id: 'welcome', role: 'bot', text: greeting },
   ]);
-  const [bubbleMode, setBubbleMode] = useState<'sangai' | 'typing'>('sangai');
+  const [bubbleMode, setBubbleMode] = useState<'mitra' | 'typing'>('mitra');
 
   const [mainBubbleVisible, setMainBubbleVisible] = useState(false);
   const [avatarEntranceDone, setAvatarEntranceDone] = useState(false);
@@ -353,13 +353,13 @@ const Chatbot = () => {
       ]);
 
       await new Promise((r) => setTimeout(r, 200));
-      setBubbleMode('sangai');
+      setBubbleMode('mitra');
     } catch (error) {
       console.error('Error calling chat API:', error);
       const errText = 'Maaf kijiye, abhi connect karne mein samasya ho rahi hai.';
       setMessages((prev) => [...prev, { id: `b-${Date.now()}`, role: 'bot', text: errText }]);
       await new Promise((r) => setTimeout(r, 200));
-      setBubbleMode('sangai');
+      setBubbleMode('mitra');
     } finally {
       setIsAwaitingResponse(false);
     }
@@ -463,7 +463,7 @@ const Chatbot = () => {
             className="relative min-h-0 flex-1 overflow-hidden"
             style={{ background: CONTENT_BG }}
           >
-            {/* सङ्गै label */}
+            {/* मित्र label */}
             <p
               className="pointer-events-none absolute left-1/2 z-20 text-center text-[12px] sm:text-[13px]"
               style={{
@@ -472,7 +472,7 @@ const Chatbot = () => {
                 color: 'var(--color-text-secondary)',
               }}
             >
-              सङ्गै
+              मित्र
             </p>
 
             {/* Main speech bubble — scrollable conversation */}

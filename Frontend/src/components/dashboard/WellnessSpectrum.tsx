@@ -20,36 +20,36 @@ const cards: {
     path: 'heavy',
     icon: Cloud,
     titleEn: "I'm carrying something heavy",
-    titleNe: 'बोझिलो छु',
+    titleNe: 'मुझ पर बोझ है',
     descEn: 'Overwhelmed, stressed, exhausted — any reason. No cause you must name.',
-    descNe: 'थकान, तनाव, अभिभूत — कुनै पनि कारण। नाम नलेख्नु पर्ने बाध्यता छैन।',
+    descNe: 'थकान, तनाव, परेशान — कोई भी कारण हो सकता है। कोई नाम देने की ज़रूरत नहीं।',
     accent: 'from-rose-soft/40 to-card',
   },
   {
     path: 'unsettled',
     icon: Wind,
     titleEn: 'My mind is unsettled',
-    titleNe: 'मन अलमलिएको छ',
+    titleNe: 'मेरा मन अशांत है',
     descEn: 'Anxious, worried, sleep is hard — something feels off.',
-    descNe: 'चिन्ता, अलमल, निद्रा गाह्रो — केही मिलेन जस्तो।',
+    descNe: 'चिंता, उलझन, नींद न आना — कुछ ठीक नहीं लग रहा।',
     accent: 'from-sage-light to-card',
   },
   {
     path: 'alone',
     icon: UserRound,
     titleEn: "I'm feeling alone",
-    titleNe: 'एक्लो महसुस गर्दैछु',
+    titleNe: 'मुझे अकेलापन महसूस हो रहा है',
     descEn: 'Isolated or disconnected — you are not the only one who feels this.',
-    descNe: 'एक्लो वा टाढा — यस्तो महसुस गर्ने तपाईं मात्र होइनन्।',
+    descNe: 'अकेलापन या दूरी — आप अकेले नहीं हैं जो ऐसा महसूस करते हैं।',
     accent: 'from-gold-warm/30 to-card',
   },
   {
     path: 'support',
     icon: LifeBuoy,
     titleEn: 'I need support',
-    titleNe: 'मलाई सहायता चाहिन्छ',
+    titleNe: 'मुझे मदद चाहिए',
     descEn: 'Something specific is happening — legal help, safety, and resources live in Help.',
-    descNe: 'केही विशेष भइरहेको छ — कानुनी सहयोग, सुरक्षा र स्रोतहरू सहायतामा छन्।',
+    descNe: 'कुछ विशेष हो रहा है — कानूनी मदद, सुरक्षा और संसाधन मदद में हैं।',
     accent: 'from-terracotta-light to-card',
   },
 ];
@@ -65,18 +65,18 @@ const WellnessSpectrum = ({ onChoose }: WellnessSpectrumProps) => {
       aria-modal="true"
     >
       <p className="mb-2 text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-        {t('AAFNAI', 'आफ्नै')}
+        {t('AAFNAI', 'अपनापन')}
       </p>
       <h1
         id="wellness-heading"
         className="mb-2 text-center font-display text-2xl font-bold text-foreground md:text-3xl text-balance"
       >
-        {t('Where are you today?', 'आज तपाईं कहाँ हुनुहुन्छ?')}
+        {t('Where are you today?', 'आज आप कैसा महसूस कर रहे हैं?')}
       </h1>
       <p className="mb-6 max-w-lg text-center text-sm text-muted-foreground leading-relaxed sm:mb-8 md:text-base">
         {t(
           'Four doors. No diagnosis. Pick what feels closest — you can change your mind anytime.',
-          'चार ढोका। कुनै निदान होइन। जुन नजिक लाग्छ त्यो छान्नुहोस् — कुनै पनि बेला बदल्न सकिन्छ।',
+          'चार दरवाज़े। कोई निदान नहीं। जो करीब लगे उसे चुनें — आप कभी भी अपनी पसंद बदल सकते हैं।',
         )}
       </p>
 

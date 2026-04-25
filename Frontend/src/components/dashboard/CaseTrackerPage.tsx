@@ -16,11 +16,11 @@ const CaseTrackerPage = ({ variant = 'default' }: CaseTrackerPageProps) => {
     <div className={cn('space-y-10 pb-8', embedded && 'space-y-8 pb-0')}>
       {!embedded && (
         <PageHeader
-          eyebrow={t('Your case', 'तपाईंको मुद्दा')}
-          title={t('Case Tracker', 'मुद्दा ट्र्याकर')}
+          eyebrow={t('Your case', 'आपका मामला')}
+          title={t('Case Tracker', 'केस ट्रैकर')}
           description={t(
             'Your timeline — add steps and keep private notes under each one. Saved on this device.',
-            'तपाईंको समयरेखा — चरण थप्नुहोस् र प्रत्येकमुनि निजी नोट राख्नुहोस्। यो यन्त्रमा बचत हुन्छ।',
+            'आपकी टाइमलाइन — कदम जोड़ें और प्रत्येक के नीचे निजी नोट्स रखें। इस डिवाइस पर सहेजा गया।',
           )}
         />
       )}
@@ -28,11 +28,11 @@ const CaseTrackerPage = ({ variant = 'default' }: CaseTrackerPageProps) => {
       <section className={cn('space-y-4', !embedded && 'scroll-mt-4')}>
         {embedded ? (
           <h3 className="font-display text-base font-semibold text-foreground">
-            {t('Case timeline', 'मुद्दाको समयरेखा')}
+            {t('Case timeline', 'केस टाइमलाइन')}
           </h3>
         ) : (
           <h2 className="font-display text-xl font-semibold text-foreground">
-            {t('Case timeline', 'मुद्दाको समयरेखा')}
+            {t('Case timeline', 'केस टाइमलाइन')}
           </h2>
         )}
         <CaseTimeline hideHeader />

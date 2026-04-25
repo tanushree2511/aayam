@@ -47,12 +47,12 @@ const defaultTabForPath = (p: WellnessPath) => {
 
 const navItems = [
   { key: 'today', icon: Calendar, labelEn: 'Today', labelNe: 'आज' },
-  { key: 'case', icon: Scale, labelEn: 'Case Tracker', labelNe: 'मुद्दा ट्र्याकर' },
-  { key: 'peer', icon: Users, labelEn: 'Peer Connect', labelNe: 'साथी जडान' },
+  { key: 'case', icon: Scale, labelEn: 'Case Tracker', labelNe: 'केस ट्रैकर' },
+  { key: 'peer', icon: Users, labelEn: 'Peer Connect', labelNe: 'सहकर्मी जडान' },
   { key: 'safety', icon: Shield, labelEn: 'Safety Plan', labelNe: 'सुरक्षा योजना' },
-  { key: 'rights', icon: BookOpen, labelEn: 'Legal Rights', labelNe: 'कानुनी अधिकार' },
-  { key: 'therapist', icon: Heart, labelEn: 'Therapist / NGO', labelNe: 'थेरापिस्ट / एनजीओ' },
-  { key: 'chatbot', icon: MessageCircle, labelEn: 'Sahara Chat', labelNe: 'सहारा च्याट' },
+  { key: 'rights', icon: BookOpen, labelEn: 'Legal Rights', labelNe: 'कानूनी अधिकार' },
+  { key: 'therapist', icon: Heart, labelEn: 'Therapist / NGO', labelNe: 'थेरेपिस्ट / एनजीओ' },
+  { key: 'chatbot', icon: MessageCircle, labelEn: 'Mitra Chat', labelNe: 'मित्र चैट' },
 ];
 
 const UserDashboard = () => {
@@ -152,7 +152,7 @@ const UserDashboard = () => {
             type="button"
             className="fixed inset-0 z-30 bg-background/50 backdrop-blur-[2px] lg:hidden"
             style={{ top: 'var(--nav-offset)' }}
-            aria-label={t('Close menu', 'मेनु बन्द')}
+            aria-label={t('Close menu', 'मेनू बंद करें')}
             onClick={() => setSidebarOpen(false)}
           />
         ) : null}
@@ -171,7 +171,7 @@ const UserDashboard = () => {
             <p className="mb-3 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               YOUR JOURNEY
             </p>
-            <nav className="flex flex-col gap-0.5" aria-label={t('Main navigation', 'मुख्य नेभिगेसन')}>
+            <nav className="flex flex-col gap-0.5" aria-label={t('Main navigation', 'मुख्य नेविगेशन')}>
               {navItems.map((item) => {
                 const active = activeTab === item.key;
                 return (
@@ -214,7 +214,7 @@ const UserDashboard = () => {
               aria-expanded={sidebarOpen}
               aria-controls="user-dashboard-sidebar"
               aria-label={
-                sidebarOpen ? t('Close menu', 'मेनु बन्द') : t('Open journey menu', 'यात्रा मेनु खोल्नुहोस्')
+                sidebarOpen ? t('Close menu', 'मेनू बंद करें') : t('Open journey menu', 'यात्रा मेनू खोलें')
               }
             >
               {sidebarOpen ? <X className="h-5 w-5" strokeWidth={2} /> : <Menu className="h-5 w-5" strokeWidth={2} />}
@@ -227,7 +227,7 @@ const UserDashboard = () => {
                 'absolute z-50 hidden h-12 w-5 items-center justify-center rounded-r-lg border border-l-0 border-border bg-card text-muted-foreground shadow-sm transition-[left] duration-300 hover:bg-muted/50 lg:flex',
               )}
               style={{ left: sidebarOpen ? '15rem' : 0, top: '50%', transform: 'translateY(-50%)' }}
-              aria-label={sidebarOpen ? t('Collapse menu', 'मेनु बन्द') : t('Expand menu', 'मेनु खोल्नुहोस्')}
+              aria-label={sidebarOpen ? t('Collapse menu', 'मेनू सिकोड़ें') : t('Expand menu', 'मेनू फैलाएं')}
             >
               {sidebarOpen ? <ChevronLeft className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
             </button>

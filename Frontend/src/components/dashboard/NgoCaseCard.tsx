@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { UserCheck, Shield, MessageCircle, Phone, Video, Loader2, CheckCircle2, RotateCcw, Save } from 'lucide-react';
+import { UserCheck, Shield, MessageCircle, Phone, Video, Loader2, CheckCircle2, RotateCcw, Save, Heart } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib/utils';
 import {
@@ -21,6 +21,7 @@ import {
   type IncidentDto,
 } from '@/lib/incidentsApi';
 import { NGO_UNIT_OPTIONS, progressLabel, unitLabel, PROGRESS_KEYS } from '@/lib/incidentMeta';
+import { CaseProgressStrip } from './CaseProgressStrip';
 
 function stageLabel(type: string, t: (en: string, ne: string) => string): string {
   const map: Record<string, [string, string]> = {
@@ -54,6 +55,16 @@ interface NgoCaseCardProps {
 }
 
 export function NgoCaseCard({ patient, t, onUpdated, updatingId, setUpdatingId }: NgoCaseCardProps) {
+  const supportMessages: Record<string, string> = {
+    court_delay: t(
+      'Court timelines are often long; your case still matters.',
+      'अदालती समय अक्सर लामो हुन सक्छ; तपाईंको मुद्दा अझै महत्त्वपूर्ण छ।',
+    ),
+    police_dismissal: t('Being dismissed is painful. You deserve to be heard. We hear you.', 'अस्वीकार हुनु पीडादायक छ। तपाईं सुनिनु योग्य हुनुहुन्छ।'),
+    threat: t('Your safety comes first. Consider reaching out to the safety planning module.', 'तपाईंको सुरक्षा पहिलो हो। सुरक्षा योजना मोड्युलमा सम्पर्क गर्नुहोस्।'),
+    other: t('Whatever you are feeling right now is valid. You are not alone.', 'तपाईंले अहिले जे महसुस गरिरहनु भएको छ त्यो मान्य छ।'),
+  };
+
   const [assignee, setAssignee] = useState('');
   const [unitMode, setUnitMode] = useState<string>('');
   const [unitCustom, setUnitCustom] = useState('');
@@ -186,6 +197,24 @@ export function NgoCaseCard({ patient, t, onUpdated, updatingId, setUpdatingId }
                 ) : null}
               </div>
             )}
+
+            <CaseProgressStrip progressState={patient.progress_state ?? 'received'} label={t} />
+
+            {patient.progress_updated_at ? (
+              <p className="text-[11px] text-muted-foreground">
+                {t('Progress last updated', 'प्रगति अपडेट')}{' '}
+                {formatDistanceToNow(new Date(patient.progress_updated_at * 1000), { addSuffix: true })}
+              </p>
+            ) : null}
+
+            <div className="rounded-lg border border-primary/10 bg-sage-light p-3">
+              <div className="flex items-start gap-2">
+                <Heart className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <p className="text-sm italic text-foreground/80">
+                  {supportMessages[patient.incident_type] ?? supportMessages.other}
+                </p>
+              </div>
+            </div>
 
             <div className="grid gap-5 rounded-xl border border-primary/15 bg-gradient-to-br from-card to-muted/20 p-4 md:grid-cols-2 md:p-5">
               <div className="space-y-3">

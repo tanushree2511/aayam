@@ -52,15 +52,15 @@ const AuthPage = () => {
         navigate(u.role === 'ngo' ? '/ngo-dashboard' : '/dashboard');
       }
     } catch (err) {
-      setAuthError(err instanceof Error ? err.message : t('Something went wrong', 'केही गल्ती भयो'));
+      setAuthError(err instanceof Error ? err.message : t('Something went wrong', 'कुछ गलत हो गया'));
     } finally {
       setSubmitting(false);
     }
   };
 
   const trustLine = [
-    { icon: ShieldCheck, text: t('Your data stays yours', 'तपाईंको डाटा तपाईंकै रहन्छ') },
-    { icon: Sparkles, text: t('Made for real journeys', 'वास्तविक यात्राको लागि') },
+    { icon: ShieldCheck, text: t('Your data stays yours', 'आपका डेटा आपका ही रहता है') },
+    { icon: Sparkles, text: t('Made for real journeys', 'वास्तविक यात्रा के लिए') },
   ];
 
   return (
@@ -86,28 +86,28 @@ const AuthPage = () => {
                 className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {t('Back to home', 'गृहपृष्ठमा फर्कनुहोस्')}
+                {t('Back to home', 'होम पर वापस जाएं')}
               </Link>
 
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-sage-light/90 px-4 py-2 text-sm font-medium text-sage-dark shadow-sm backdrop-blur-sm">
                 <Heart className="h-4 w-4 text-primary" />
-                {t('Sangai', 'सङ्गै')}
+                {t('Mitra', 'मित्र')}
               </div>
 
               <h1 className="font-display text-3xl font-bold leading-tight text-foreground md:text-4xl text-balance">
                 {isLogin
-                  ? t('Welcome back', 'फेरि स्वागत छ')
-                  : t('Begin gently', 'बिस्तारै सुरु गर्नुहोस्')}
+                  ? t('Welcome back', 'वापसी पर स्वागत है')
+                  : t('Begin gently', 'शांति से शुरुआत करें')}
               </h1>
               <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
                 {isLogin
                   ? t(
                       'Pick up where you left off — your journey is still here.',
-                      'जहाँ छोड्नुभएको थियो त्यहीँबाट — तपाईंको यात्रा अझै यहाँ छ।',
+                      'जहां आपने छोड़ा था वहीं से शुरू करें — आपकी यात्रा अभी भी यहीं है।',
                     )
                   : t(
-                      'One account for case tracking, peer support, and Sahara chat — at your pace.',
-                      'मुद्दा ट्र्याक, साथी सहयोग र सहारा च्याट — तपाईंको गतिमा।',
+                      'One account for case tracking, peer support, and Mitra chat — at your pace.',
+                      'केस ट्रैकिंग, सहकर्मी सहायता और मित्र चैट के लिए एक खाता — आपकी गति से।',
                     )}
               </p>
 
@@ -132,10 +132,10 @@ const AuthPage = () => {
                   </div>
                 </div>
                 <CardTitle className="font-display text-2xl md:text-[1.65rem]">
-                  {isLogin ? t('Sign in', 'साइन इन') : t('Create account', 'खाता बनाउनुहोस्')}
+                  {isLogin ? t('Sign in', 'साइन इन करें') : t('Create account', 'खाता बनाएं')}
                 </CardTitle>
                 <CardDescription className="text-base">
-                  {t('Your safe space awaits', 'तपाईंको सुरक्षित ठाउँ पर्खिरहेको छ')}
+                  {t('Your safe space awaits', 'आपका सुरक्षित स्थान आपका इंतज़ार कर रहा है')}
                 </CardDescription>
 
                 {/* Login / Sign up switch */}
@@ -156,7 +156,7 @@ const AuthPage = () => {
                         : 'text-muted-foreground hover:text-foreground',
                     )}
                   >
-                    {t('Login', 'लगइन')}
+                    {t('Login', 'लॉगिन')}
                   </button>
                   <button
                     type="button"
@@ -178,7 +178,7 @@ const AuthPage = () => {
               <CardContent className="space-y-6 px-6 pb-8 pt-6">
                 <Tabs value={role} onValueChange={(v) => setRole(v as 'user' | 'ngo')} className="w-full">
                   <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                    {t('I am signing in as', 'म साइन इन गर्दैछु')}
+                    {t('I am signing in as', 'मैं इस रूप में साइन इन कर रहा हूँ')}
                   </p>
                   <TabsList className="grid h-12 w-full grid-cols-2 gap-1 rounded-xl bg-muted/90 p-1">
                     <TabsTrigger
@@ -186,7 +186,7 @@ const AuthPage = () => {
                       className="gap-2 rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm"
                     >
                       <User className="h-4 w-4 shrink-0" />
-                      {t('User', 'प्रयोगकर्ता')}
+                      {t('User', 'उपयोगकर्ता')}
                     </TabsTrigger>
                     <TabsTrigger
                       value="ngo"
@@ -202,13 +202,13 @@ const AuthPage = () => {
                   {!isLogin && (
                     <div className="space-y-2">
                       <Label htmlFor="name" className="text-foreground">
-                        {role === 'ngo' ? t('Organization Name', 'संस्थाको नाम') : t('Your Name', 'तपाईंको नाम')}
+                        {role === 'ngo' ? t('Organization Name', 'संस्था का नाम') : t('Your Name', 'आपका नाम')}
                       </Label>
                       <Input
                         id="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        placeholder={role === 'ngo' ? 'Helping Hands Nepal' : 'Sita'}
+                        placeholder={role === 'ngo' ? 'Helping Hands' : 'Sita'}
                         className="h-11 rounded-xl border-border/80 bg-background/80"
                         autoComplete="name"
                       />
@@ -217,17 +217,17 @@ const AuthPage = () => {
                   {!isLogin && role === 'user' && (
                     <div className="space-y-2">
                       <Label className="text-foreground">
-                        {t('Your district (for local resources)', 'तपाईंको जिल्ला (स्थानीय स्रोतको लागि)')}
+                        {t('Your district (for local resources)', 'आपका ज़िला (स्थानीय संसाधनों के लिए)')}
                       </Label>
                       <p className="text-xs leading-relaxed text-muted-foreground">
                         {t(
                           'We never ask for your exact address — district only.',
-                          'हामी तपाईंको ठ्याक्कै ठेगाना सोध्दैनौं — जिल्ला मात्र।',
+                          'हम कभी आपका पूरा पता नहीं पूछते — केवल ज़िला।',
                         )}
                       </p>
                       <Select value={districtSelect} onValueChange={setDistrictSelect}>
                         <SelectTrigger className="h-11 w-full rounded-xl border-border/80 bg-background/80">
-                          <SelectValue placeholder={t('Select district', 'जिल्ला छान्नुहोस्')} />
+                          <SelectValue placeholder={t('Select district', 'ज़िला चुनें')} />
                         </SelectTrigger>
                         <SelectContent className="max-h-[min(70vh,320px)]">
                           {NEPAL_DISTRICTS.map((d) => (
@@ -236,20 +236,20 @@ const AuthPage = () => {
                             </SelectItem>
                           ))}
                           <SelectItem value={NEPAL_DISTRICT_SELECT_OTHER}>
-                            {t('Other (type district name)', 'अन्य (जिल्लाको नाम लेख्नुहोस्)')}
+                            {t('Other (type district name)', 'अन्य (ज़िले का नाम लिखें)')}
                           </SelectItem>
                         </SelectContent>
                       </Select>
                       {districtSelect === NEPAL_DISTRICT_SELECT_OTHER ? (
                         <div className="space-y-2">
                           <Label htmlFor="district-other" className="text-foreground">
-                            {t('District name', 'जिल्लाको नाम')}
+                            {t('District name', 'ज़िले का नाम')}
                           </Label>
                           <Input
                             id="district-other"
                             value={districtOther}
                             onChange={(e) => setDistrictOther(e.target.value)}
-                            placeholder={t('e.g. your municipality or spelling', 'उदा. तपाईंको जिल्ला')}
+                            placeholder={t('e.g. your municipality or spelling', 'उदा. आपकी नगर पालिका या वर्तनी')}
                             className="h-11 rounded-xl border-border/80 bg-background/80"
                             autoComplete="off"
                           />
@@ -259,7 +259,7 @@ const AuthPage = () => {
                   )}
                   <div className="space-y-2">
                     <Label htmlFor="email" className="text-foreground">
-                      {t('Email', 'इमेल')}
+                      {t('Email', 'ईमेल')}
                     </Label>
                     <Input
                       id="email"
@@ -302,7 +302,7 @@ const AuthPage = () => {
                       <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
                     ) : (
                       <>
-                        {isLogin ? t('Login', 'लगइन') : t('Create Account', 'खाता बनाउनुहोस्')}
+                        {isLogin ? t('Login', 'लॉगिन') : t('Create Account', 'खाता बनाएं')}
                         <ArrowRight className="h-4 w-4" />
                       </>
                     )}
@@ -311,13 +311,13 @@ const AuthPage = () => {
 
                 <div className="border-t border-border/60 pt-6 text-center">
                   <p className="text-sm text-muted-foreground">
-                    {isLogin ? t("Don't have an account?", 'खाता छैन?') : t('Already have an account?', 'पहिले नै खाता छ?')}{' '}
+                    {isLogin ? t("Don't have an account?", 'खाता नहीं है?') : t('Already have an account?', 'पहले से ही खाता है?')}{' '}
                     <button
                       type="button"
                       onClick={() => setIsLogin(!isLogin)}
                       className="font-semibold text-primary underline-offset-4 hover:underline"
                     >
-                      {isLogin ? t('Sign Up', 'साइन अप') : t('Login', 'लगइन')}
+                      {isLogin ? t('Sign Up', 'साइन अप') : t('Login', 'लॉगिन')}
                     </button>
                   </p>
                   <Link
@@ -325,7 +325,7 @@ const AuthPage = () => {
                     className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-primary lg:hidden"
                   >
                     <ArrowLeft className="h-3.5 w-3.5" />
-                    {t('Back to home', 'गृहपृष्ठमा फर्कनुहोस्')}
+                    {t('Back to home', 'होम पर वापस जाएं')}
                   </Link>
                 </div>
               </CardContent>

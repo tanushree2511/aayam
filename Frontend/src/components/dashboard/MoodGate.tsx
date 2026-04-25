@@ -115,7 +115,7 @@ const MoodGate = ({ onComplete }: MoodGateProps) => {
         </div>
 
         <h1 className="mb-8 max-w-xl px-1 text-center font-display text-2xl font-bold leading-tight text-[#2d2520] xs:text-3xl sm:mb-12 sm:text-4xl md:mb-14 md:text-[2.5rem]">
-          {t('What color is your mind today?', 'आज तपाईंको मन कुन रङजस्तो छ?')}
+          {t('What color is your mind today?', 'आज आपके मन का रंग क्या है?')}
         </h1>
 
         <div className="grid w-full max-w-[600px] grid-cols-4 justify-items-center gap-4 xs:gap-6 sm:gap-8">
@@ -137,18 +137,18 @@ const MoodGate = ({ onComplete }: MoodGateProps) => {
 
         <aside
           className="mt-10 max-w-xl border-t border-[#e8e2da] px-2 pt-8 text-center sm:mt-12 sm:max-w-2xl"
-          aria-label={t('Companion disclaimer', 'साथी सम्बन्धी अस्वीकरण')}
+          aria-label={t('Companion disclaimer', 'साथी अस्वीकरण')}
         >
           <h2 className="mb-3 font-display text-sm font-semibold leading-snug text-[#2d2520] sm:text-base">
             {t(
               'General Use Disclaimer (Companion Statement)',
-              'सामान्य प्रयोग अस्वीकरण (साथी विवरण)',
+              'सामान्य उपयोग अस्वीकरण (साथी विवरण)',
             )}
           </h2>
           <p className="text-left text-xs leading-relaxed text-[#5c534c] sm:text-sm sm:leading-relaxed">
             {t(
               'This application is designed to act as a supportive companion, offering guidance, conversation, and general well-being resources. It is not a licensed healthcare provider, therapist, or diagnostic tool.',
-              'यो एप्लिकेशन एक सहयोगी साथीको रूपमा डिजाइन गरिएको हो, जसले मार्गदर्शन, संवाद, र सामान्य मानसिक तथा भावनात्मक स्वास्थ्य सम्बन्धी स्रोतहरू प्रदान गर्दछ। यो कुनै लाइसेन्स प्राप्त स्वास्थ्य सेवा प्रदायक, थेरापिस्ट, वा रोग पहिचान गर्ने उपकरण होइन।',
+              'यह एप्लिकेशन एक सहायक साथी के रूप में कार्य करने के लिए डिज़ाइन किया गया है, जो मार्गदर्शन, बातचीत और सामान्य भलाई के संसाधन प्रदान करता है। यह एक लाइसेंस प्राप्त स्वास्थ्य सेवा प्रदाता, चिकित्सक या नैदानिक ​​उपकरण नहीं है।',
             )}
           </p>
         </aside>

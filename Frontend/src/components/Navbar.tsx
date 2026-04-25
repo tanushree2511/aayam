@@ -24,7 +24,7 @@ const Navbar = () => {
         <Link to="/" className="flex items-center gap-2">
           <img src={sangaiLogo} alt="" className="h-[28px] w-auto max-w-[120px] object-contain" />
           <span className="text-xl font-display font-semibold text-foreground">
-            {t('Sangai', 'सङ्गै')}
+            {t('Mitra', 'मित्र')}
           </span>
         </Link>
 
@@ -46,7 +46,7 @@ const Navbar = () => {
                 <DropdownMenuContent align="end" className="w-80 p-0" collisionPadding={16}>
                   <div className="border-b border-border/60 bg-muted/30 px-3 py-3">
                     <DropdownMenuLabel className="p-0 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                      {t('Your profile', 'तपाईंको प्रोफाइल')}
+                      {t('Your profile', 'आपकी प्रोफाइल')}
                     </DropdownMenuLabel>
                     <p className="mt-1 font-display text-base font-semibold text-foreground">{user.name}</p>
                   </div>
@@ -54,7 +54,7 @@ const Navbar = () => {
                     <div className="flex gap-2.5">
                       <Mail className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
                       <div className="min-w-0">
-                        <p className="text-xs font-medium text-muted-foreground">{t('Email', 'इमेल')}</p>
+                        <p className="text-xs font-medium text-muted-foreground">{t('Email', 'ईमेल')}</p>
                         <p className="break-all text-foreground">{user.email}</p>
                       </div>
                     </div>
@@ -64,8 +64,8 @@ const Navbar = () => {
                         <p className="text-xs font-medium text-muted-foreground">{t('Role', 'भूमिका')}</p>
                         <p className="text-foreground">
                           {user.role === 'ngo'
-                            ? t('NGO partner', 'एनजीओ साझेदार')
-                            : t('User', 'प्रयोगकर्ता')}
+                            ? t('NGO partner', 'NGO साझेदार')
+                            : t('User', 'उपयोगकर्ता')}
                         </p>
                       </div>
                     </div>
@@ -74,7 +74,7 @@ const Navbar = () => {
                         <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
                         <div>
                           <p className="text-xs font-medium text-muted-foreground">
-                            {t('District', 'जिल्ला')}
+                            {t('District', 'ज़िला')}
                           </p>
                           <p className="text-foreground">{user.district ?? '—'}</p>
                         </div>
@@ -87,21 +87,21 @@ const Navbar = () => {
                       <Link to={user.role === 'ngo' ? '/ngo-dashboard' : '/dashboard'} className="flex items-center gap-2">
                         <LayoutDashboard className="h-4 w-4" />
                         {user.role === 'ngo'
-                          ? t('NGO dashboard', 'एनजीओ ड्यासबोर्ड')
-                          : t('My dashboard', 'मेरो ड्यासबोर्ड')}
+                          ? t('NGO dashboard', 'NGO डैशबोर्ड')
+                          : t('My dashboard', 'मेरा डैशबोर्ड')}
                       </Link>
                     </DropdownMenuItem>
                   </div>
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button variant="ghost" size="icon" onClick={logout} aria-label={t('Log out', 'लगआउट')}>
+              <Button variant="ghost" size="icon" onClick={logout} aria-label={t('Log out', 'लॉग आउट')}>
                 <LogOut className="h-4 w-4" />
               </Button>
             </div>
           ) : (
             <Link to="/auth">
               <Button className="btn-hero text-sm px-6 py-2">
-                {t('Login', 'लगइन')}
+                {t('Login', 'लॉगिन')}
               </Button>
             </Link>
           )}

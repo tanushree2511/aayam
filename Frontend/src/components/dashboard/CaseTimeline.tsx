@@ -32,7 +32,7 @@ function emotionalNoteText(note: string | undefined, t: (en: string, ne: string)
   if (note === IBT_NOTE_KEY) {
     return t(
       "This is the 2nd postponement. It's okay to feel frustrated. Many women at this stage feel the same exhaustion.",
-      'यो दोस्रो स्थगन हो। निराश महसुस गर्नु ठीक छ। यस चरणमा धेरै महिलाहरूले उस्तै थकान महसुस गर्छन्।',
+      'यह दूसरा स्थगन है। निराश महसूस करना ठीक है। इस स्तर पर कई महिलाएं इसी थकावट को महसूस करती हैं।',
     );
   }
   return note;
@@ -101,23 +101,23 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
           <p className="max-w-xl text-sm text-muted-foreground">
             {t(
               'Saved on this device — sync from backend when available.',
-              'यो यन्त्रमा बचत — ब्याकएन्ड जोड्दा मिलाउन सकिन्छ।',
+              'इस डिवाइस पर सहेजा गया — उपलब्ध होने पर बैकएंड से सिंक करें।',
             )}
           </p>
           <Button className="btn-hero shrink-0 gap-2 rounded-full text-sm" type="button" onClick={() => setOpen(true)}>
             <Plus className="h-4 w-4" />
-            {t('Add event', 'घटना थप्नुहोस्')}
+            {t('Add event', 'घटना जोड़ें')}
           </Button>
         </div>
       ) : (
         <PageHeader
-          eyebrow={t('Legal process', 'कानुनी प्रक्रिया')}
-          title={t('Case timeline', 'मुद्दाको समयरेखा')}
-          description={t('Saved on this device — sync from backend when available.', 'यो यन्त्रमा बचत — ब्याकएन्ड जोड्दा मिलाउन सकिन्छ।')}
+          eyebrow={t('Legal process', 'कानूनी प्रक्रिया')}
+          title={t('Case timeline', 'केस टाइमलाइन')}
+          description={t('Saved on this device — sync from backend when available.', 'इस डिवाइस पर सहेजा गया — उपलब्ध होने पर बैकएंड से सिंक करें।')}
           action={
             <Button className="btn-hero shrink-0 gap-2 rounded-full text-sm" type="button" onClick={() => setOpen(true)}>
               <Plus className="h-4 w-4" />
-              {t('Add event', 'घटना थप्नुहोस्')}
+              {t('Add event', 'घटना जोड़ें')}
             </Button>
           }
         />
@@ -126,7 +126,7 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="rounded-2xl sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="font-display">{t('Add case event', 'मुद्दाको घटना थप्नुहोस्')}</DialogTitle>
+            <DialogTitle className="font-display">{t('Add case event', 'केस ईवेंट जोड़ें')}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4 py-2">
             <div className="space-y-2">
@@ -135,12 +135,12 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
                 id="ev-title"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                placeholder={t('e.g. Next hearing', 'उदा. अर्को सुनुवाइ')}
+                placeholder={t('e.g. Next hearing', 'उदा. अगली सुनवाई')}
                 className="rounded-xl"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="ev-date">{t('Date', 'मिति')}</Label>
+              <Label htmlFor="ev-date">{t('Date', 'दिनांक')}</Label>
               <Input
                 id="ev-date"
                 type="date"
@@ -158,9 +158,9 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="court">{t('Court', 'अदालत')}</SelectItem>
-                    <SelectItem value="police">{t('Police', 'प्रहरी')}</SelectItem>
-                    <SelectItem value="document">{t('Document', 'कागजात')}</SelectItem>
-                    <SelectItem value="milestone">{t('Milestone', 'कोशेढुङ्गा')}</SelectItem>
+                    <SelectItem value="police">{t('Police', 'पुलिस')}</SelectItem>
+                    <SelectItem value="document">{t('Document', 'दस्तावेज़')}</SelectItem>
+                    <SelectItem value="milestone">{t('Milestone', 'मील का पत्थर')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -171,9 +171,9 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="completed">{t('Completed', 'सम्पन्न')}</SelectItem>
+                    <SelectItem value="completed">{t('Completed', 'पूर्ण')}</SelectItem>
                     <SelectItem value="upcoming">{t('Upcoming', 'आगामी')}</SelectItem>
-                    <SelectItem value="delayed">{t('Delayed', 'ढिलो')}</SelectItem>
+                    <SelectItem value="delayed">{t('Delayed', 'विलंबित')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -181,10 +181,10 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
           </div>
           <DialogFooter className="gap-2 sm:gap-0">
             <Button type="button" variant="outline" className="rounded-full" onClick={() => setOpen(false)}>
-              {t('Cancel', 'रद्द')}
+              {t('Cancel', 'रद्द करें')}
             </Button>
             <Button type="button" className="btn-hero rounded-full" onClick={addEvent}>
-              {t('Save', 'बचत')}
+              {t('Save', 'सहेजें')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -220,9 +220,9 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
                   </div>
                   <Badge className={statusColors[event.status]}>
                     {event.status === 'completed'
-                      ? t('Completed', 'सम्पन्न')
+                      ? t('Completed', 'पूर्ण')
                       : event.status === 'delayed'
-                        ? t('Delayed', 'ढिलो')
+                        ? t('Delayed', 'विलंबित')
                         : t('Upcoming', 'आगामी')}
                   </Badge>
                 </div>
@@ -236,18 +236,18 @@ const CaseTimeline = ({ hideHeader = false }: CaseTimelineProps) => {
                 )}
                 <div className="mt-4 space-y-2 border-t border-border/50 pt-4">
                   <Label htmlFor={`case-notes-${event.id}`} className="text-xs font-medium text-muted-foreground">
-                    {t('Notes', 'नोटहरू')}
+                    {t('Notes', 'टिप्पणियाँ')}
                   </Label>
                   <Textarea
                     id={`case-notes-${event.id}`}
                     value={event.notes ?? ''}
                     onChange={(e) => setEventNotes(event.id, e.target.value)}
-                    placeholder={t('Private notes for this step…', 'यस चरणका लागि निजी नोट…')}
+                    placeholder={t('Private notes for this step…', 'इस चरण के लिए निजी नोट्स...')}
                     rows={3}
                     className="min-h-[72px] resize-y rounded-xl border-border/80 text-sm"
                   />
                   <p className="text-[11px] text-muted-foreground">
-                    {t('Saved on this device with this case step.', 'यो यन्त्रमा यो चरणसँगै बचत हुन्छ।')}
+                    {t('Saved on this device with this case step.', 'इस डिवाइस पर इस केस स्टेप के साथ सहेजा गया।')}
                   </p>
                 </div>
               </CardContent>

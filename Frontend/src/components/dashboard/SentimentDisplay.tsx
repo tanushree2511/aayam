@@ -12,17 +12,17 @@ const SentimentDisplay = ({ sentiment }: SentimentDisplayProps) => {
   const { t } = useLanguage();
 
   const getOverallLabel = (score: number) => {
-    if (score >= 80) return { en: "You're doing great today 💚", ne: 'आज तपाईं राम्रो गर्दै हुनुहुन्छ 💚', color: 'text-primary' };
-    if (score >= 60) return { en: "You're holding up well 🙂", ne: 'तपाईं राम्रोसँग टिकिरहनुभएको छ 🙂', color: 'text-primary' };
-    if (score >= 40) return { en: "It's okay to have tough days 🤝", ne: 'कठिन दिनहरू हुनु ठीक छ 🤝', color: 'text-muted-foreground' };
-    return { en: "We see you. You're not alone 💛", ne: 'हामीले तपाईंलाई देख्छौं। तपाईं एक्लो हुनुहुन्न 💛', color: 'text-destructive' };
+    if (score >= 80) return { en: "You're doing great today 💚", ne: 'आज आप बहुत अच्छा कर रहे हैं 💚', color: 'text-primary' };
+    if (score >= 60) return { en: "You're holding up well 🙂", ne: 'आप अच्छी तरह से संभाल रहे हैं 🙂', color: 'text-primary' };
+    if (score >= 40) return { en: "It's okay to have tough days 🤝", ne: 'मुश्किल दिन होना ठीक है 🤝', color: 'text-muted-foreground' };
+    return { en: "We see you. You're not alone 💛", ne: 'हम आपके साथ हैं। आप अकेले नहीं हैं 💛', color: 'text-destructive' };
   };
 
   const metrics = [
     { key: 'mood', icon: Heart, en: 'Mood', ne: 'मनोदशा', value: sentiment.mood },
     { key: 'safety', icon: Shield, en: 'Safety', ne: 'सुरक्षा', value: sentiment.safety },
     { key: 'support', icon: Users, en: 'Support', ne: 'सहयोग', value: sentiment.support },
-    { key: 'sleep', icon: Moon, en: 'Sleep', ne: 'निद्रा', value: sentiment.sleep },
+    { key: 'sleep', icon: Moon, en: 'Sleep', ne: 'नींद', value: sentiment.sleep },
   ];
 
   const overall = getOverallLabel(sentiment.overallScore);
@@ -31,7 +31,7 @@ const SentimentDisplay = ({ sentiment }: SentimentDisplayProps) => {
     <Card className="border-border/50 mb-6">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg font-display flex items-center gap-2">
-          {t("Today's Well-being", 'आजको भलाइ')}
+          {t("Today's Well-being", 'आज की भलाई')}
         </CardTitle>
         <p className={`text-sm font-medium ${overall.color}`}>{t(overall.en, overall.ne)}</p>
       </CardHeader>
@@ -49,7 +49,7 @@ const SentimentDisplay = ({ sentiment }: SentimentDisplayProps) => {
           ))}
         </div>
         <div className="mt-4 pt-3 border-t border-border/50 flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">{t('Overall Score', 'समग्र स्कोर')}</span>
+          <span className="text-sm text-muted-foreground">{t('Overall Score', 'कुल स्कोर')}</span>
           <span className="text-2xl font-display font-bold text-foreground">{sentiment.overallScore}%</span>
         </div>
       </CardContent>

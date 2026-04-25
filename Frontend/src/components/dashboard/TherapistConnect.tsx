@@ -44,13 +44,13 @@ import AILawyerChat from './AILawyerChat';
 import { Scale, HeartHandshake } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const WEEK_LABELS_NE = ['सोम', 'मङ्गल', 'बुध', 'बिहि', 'शुक्र', 'शनि', 'आइत'];
+const WEEK_LABELS_NE = ['सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि', 'रवि'];
 
 function AvailabilityStrip({ week }: { week: boolean[] }) {
   return (
     <div className="mt-3">
       <p className="mb-1.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-        यस हप्ता उपलब्धता
+        इस सप्ताह की उपलब्धता
       </p>
       <div className="flex gap-1">
         {week.map((on, i) => (
@@ -76,12 +76,12 @@ function filterCounselors(
   return list.filter((c) => {
     if (!c.modes.includes(mode)) return false;
     if (womanPref === 'woman' && !c.isWoman) return false;
-    if (lang === 'ne') {
-      if (!c.languages.some((l) => l === 'ne' || l === 'ne-en')) return false;
-    } else if (lang === 'ne-en') {
-      if (!c.languages.includes('ne-en')) return false;
+    if (lang === 'hi') {
+      if (!c.languages.some((l) => l === 'hi' || l === 'hi-en')) return false;
+    } else if (lang === 'hi-en') {
+      if (!c.languages.includes('hi-en')) return false;
     } else {
-      if (!c.languages.includes('ne-en')) return false;
+      if (!c.languages.includes('hi-en')) return false;
     }
     return true;
   });
@@ -116,7 +116,7 @@ const TherapistConnect = () => {
     }
   }, [user?.district]);
 
-  const [langPref, setLangPref] = useState<CounselorLanguage>('ne');
+  const [langPref, setLangPref] = useState<CounselorLanguage>('hi');
   const [womanPref, setWomanPref] = useState<'woman' | 'any'>('any');
   const [modePref, setModePref] = useState<CounselorMode>('voice');
 
@@ -136,23 +136,23 @@ const TherapistConnect = () => {
 
   const handleRequestCounselor = (c: Counselor) => {
     toast.success(
-      language === 'ne'
-        ? 'अनुरोध समन्वयकलाई पठाइयो। तपाईंको फोन नम्बर सिधा साझा गरिएको छैन।'
+      language === 'hi'
+        ? 'अनुरोध समन्वयक को भेज दिया गया है। आपका फ़ोन नंबर सीधे साझा नहीं किया गया है।'
         : 'Request sent to the NGO coordinator. Your phone number was not shared directly.',
     );
     console.log('[demo] counselor request', c.id, { district });
   };
 
-  const ne = language === 'ne';
+  const ne = language === 'hi';
 
   return (
     <div className="space-y-8 font-sans">
       <PageHeader
         eyebrow={t('Support', 'सहयोग')}
-        title={t('Resources & help', 'स्रोत र सहयोग')}
+        title={t('Resources & help', 'संसाधन और मदद')}
         description={t(
           'Three levels of support — immediate, matched counseling, and legal audio.',
-          'तीन तहको सहयोग — तत्काल, मिल्दो परामर्श, र कानुनी अडियो।',
+          'समर्थन के तीन स्तर — तत्काल, परामर्श, और कानूनी ऑडियो।',
         )}
       />
 
@@ -180,13 +180,13 @@ const TherapistConnect = () => {
             १
           </span>
           <h3 className="font-display text-lg font-semibold text-foreground">
-            {t('Next 10 minutes', 'अर्को १० मिनेट भित्र')}
+            {t('Next 10 minutes', 'अगले 10 मिनट में')}
           </h3>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
           {t(
             'Crisis numbers, shelters in your district, and an emergency SMS you can send on 2G — no internet required.',
-            'संकटका नम्बरहरू, तपाईंको जिल्लाका आश्रय, र आपतकालीन SMS — २G मा पनि, इन्टरनेट बिना।',
+            'संकटकालीन नंबर, आपके ज़िले के आश्रय, और एक आपातकालीन SMS जिसे आप 2G पर भी भेज सकते हैं — बिना इंटरनेट के।',
           )}
         </p>
 
@@ -196,10 +196,10 @@ const TherapistConnect = () => {
               <div>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <MapPin className="h-4 w-4 text-primary" />
-                  {t('Your district', 'तपाईंको जिल्ला')}
+                  {t('Your district', 'आपका ज़िला')}
                 </CardTitle>
                 <CardDescription>
-                  {t('Set once at signup — change here anytime. We never store your exact location.', 'साइनअपमा एक पटक — यहाँबाट पनि बदल्न सकिन्छ। ठ्याक्कै ठेगाना राख्दैनौं।')}
+                  {t('Set once at signup — change here anytime. We never store your exact location.', 'साइनअप पर एक बार सेट करें — यहाँ से कभी भी बदलें। हम आपका सटीक स्थान कभी संग्रहीत नहीं करते हैं।')}
                 </CardDescription>
               </div>
               <div className="w-full sm:w-56">
@@ -225,7 +225,7 @@ const TherapistConnect = () => {
                       </SelectItem>
                     ))}
                     <SelectItem value={NEPAL_DISTRICT_SELECT_OTHER}>
-                      {t('Other (type district name)', 'अन्य (जिल्लाको नाम लेख्नुहोस्)')}
+                      {t('Other (type district name)', 'अन्य (ज़िले का नाम लिखें)')}
                     </SelectItem>
                   </SelectContent>
                 </Select>
@@ -241,7 +241,7 @@ const TherapistConnect = () => {
                         setOtherPicker(false);
                       }
                     }}
-                    placeholder={t('Your district name', 'तपाईंको जिल्ला')}
+                    placeholder={t('Your district name', 'आपके ज़िले का नाम')}
                   />
                 ) : null}
               </div>
@@ -251,7 +251,7 @@ const TherapistConnect = () => {
             <div>
               <h4 className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
                 <Phone className="h-4 w-4 text-primary" />
-                {t('Crisis & helpline numbers', 'संकट र हेल्पलाइन नम्बर')}
+                {t('Crisis & helpline numbers', 'संकट और हेल्पलाइन नंबर')}
               </h4>
               <div className="grid gap-2 sm:grid-cols-3">
                 {CRISIS_LINES.map((line) => (
@@ -273,13 +273,13 @@ const TherapistConnect = () => {
             <div>
               <h4 className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
                 <Building2 className="h-4 w-4 text-primary" />
-                {t('Shelters & safe spaces (your district)', 'आश्रय र सुरक्षित ठाउँ (तपाईंको जिल्ला)')}
+                {t('Shelters & safe spaces (your district)', 'आश्रय और सुरक्षित स्थान (आपका ज़िला)')}
               </h4>
               {!NEPAL_DISTRICTS_77_SET.has(district) && (
                 <p className="mb-2 rounded-lg bg-muted/50 px-3 py-2 text-xs text-muted-foreground">
                   {t(
                     'Showing example locations in Kathmandu valley. Set a specific district when you can.',
-                    'काठमाडौं उपत्यकाका उदाहरण देखाइँदै। जिल्ला छान्नुहोस् जब सक्नुहुन्छ।',
+                    'काठमांडू घाटी में उदाहरण स्थान दिखा रहा है। जब संभव हो एक विशिष्ट ज़िला निर्धारित करें।',
                   )}
                 </p>
               )}
@@ -309,12 +309,12 @@ const TherapistConnect = () => {
                 <div className="space-y-1">
                   <h4 className="flex items-center gap-2 text-sm font-semibold text-foreground">
                     <MessageSquare className="h-4 w-4 text-primary" />
-                    {t('Emergency SMS to someone you trust', 'विश्वासको मानिसलाई आपतकालीन SMS')}
+                    {t('Emergency SMS to someone you trust', 'किसी भरोसेमंद व्यक्ति को आपातकालीन SMS')}
                   </h4>
                   <p className="text-xs text-muted-foreground">
                     {t(
                       'Opens your phone’s SMS app with a short Nepali message. You choose the contact — works offline.',
-                      'फोनको SMS खोल्छ — छोटो नेपाली सन्देश। सम्पर्क तपाईंले छान्नुहोस् — अफलाइनमा पनि चल्छ।',
+                      'यह आपके फोन का SMS ऐप एक छोटे संदेश के साथ खोलता है। संपर्क आप चुनते हैं — यह ऑफ़लाइन भी काम करता है।',
                     )}
                   </p>
                   <blockquote className="mt-2 border-l-2 border-primary/40 pl-3 text-sm italic text-foreground">
@@ -327,7 +327,7 @@ const TherapistConnect = () => {
                   onClick={() => openNativeSms(EMERGENCY_SMS_BODY)}
                 >
                   <MessageSquare className="h-4 w-4" />
-                  {t('Review & send SMS', 'हेरी पठाउनुहोस्')}
+                  {t('Review & send SMS', 'समीक्षा करें और SMS भेजें')}
                 </Button>
               </div>
             </div>
@@ -342,19 +342,19 @@ const TherapistConnect = () => {
             २
           </span>
           <h3 className="font-display text-lg font-semibold text-foreground">
-            {t('Counselor match', 'परामर्शदाता मिलान')}
+            {t('Counselor match', 'परामर्शदाता का मिलान')}
           </h3>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
           {t(
             'Answer three questions. We show NGO partners who fit — you request; the coordinator connects you without sharing your number directly.',
-            'तीन प्रश्न। मिल्ने साझेदार देखाउँछौं — अनुरोध गर्नुहोस्; समन्वयकले जोड्छ, नम्बर सिधा साझा हुँदैन।',
+            'तीन सवालों के जवाब दें। हम उपयुक्त NGO भागीदारों को दिखाते हैं — आप अनुरोध करते हैं; समन्वयक सीधे आपका नंबर साझा किए बिना आपको जोड़ता है।',
           )}
         </p>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('Your preferences', 'तपाईंको रोजाइ')}</CardTitle>
+            <CardTitle className="text-base">{t('Your preferences', 'आपकी पसंद')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="space-y-2">
@@ -365,16 +365,16 @@ const TherapistConnect = () => {
                 className="grid gap-2 sm:grid-cols-3"
               >
                 <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                  <RadioGroupItem value="ne" id="l-ne" />
-                  <span className="text-sm">{t('Nepali', 'नेपाली')}</span>
+                  <RadioGroupItem value="hi" id="l-hi" />
+                  <span className="text-sm">{t('Hindi', 'हिन्दी')}</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-                  <RadioGroupItem value="ne-en" id="l-bi" />
-                  <span className="text-sm">{t('Nepali + English', 'नेपाली + अङ्ग्रेजी')}</span>
+                  <RadioGroupItem value="hi-en" id="l-bi" />
+                  <span className="text-sm">{t('Hindi + English', 'हिन्दी + अंग्रेजी')}</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
                   <RadioGroupItem value="other" id="l-ot" />
-                  <span className="text-sm">{t('Other language need', 'अरू भाषा चाहिन्छ')}</span>
+                  <span className="text-sm">{t('Other language need', 'अन्य भाषा चाहिए')}</span>
                 </label>
               </RadioGroup>
             </div>
@@ -391,17 +391,17 @@ const TherapistConnect = () => {
               >
                 <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
                   <RadioGroupItem value="woman" id="w-y" />
-                  <span className="text-sm">{t('I prefer a woman counselor', 'महिला परामर्शदाता रोज्छु')}</span>
+                  <span className="text-sm">{t('I prefer a woman counselor', 'मैं एक महिला परामर्शदाता पसंद करूंगी')}</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
                   <RadioGroupItem value="any" id="w-n" />
-                  <span className="text-sm">{t('No preference', 'कुनै रोजाइ छैन')}</span>
+                  <span className="text-sm">{t('No preference', 'कोई प्राथमिकता नहीं')}</span>
                 </label>
               </RadioGroup>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium">{t('How to connect', 'कसरी जोडिने')}</Label>
+              <Label className="text-sm font-medium">{t('How to connect', 'जुड़ने का तरीका')}</Label>
               <RadioGroup
                 value={modePref}
                 onValueChange={(v) => setModePref(v as CounselorMode)}
@@ -410,11 +410,11 @@ const TherapistConnect = () => {
                 <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
                   <RadioGroupItem value="voice" id="m-v" />
                   <Phone className="h-4 w-4 shrink-0 text-muted-foreground" />
-                  <span className="text-sm">{t('Voice call', 'भ्वाइस कल')}</span>
+                  <span className="text-sm">{t('Voice call', 'वॉयस कॉल')}</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
                   <RadioGroupItem value="in-person" id="m-p" />
-                  <span className="text-sm">{t('In person', 'अनुहार-अनुहार')}</span>
+                  <span className="text-sm">{t('In person', 'व्यक्तिगत रूप से')}</span>
                 </label>
               </RadioGroup>
             </div>
@@ -425,7 +425,7 @@ const TherapistConnect = () => {
           {matchedCounselors.length === 0 ? (
             <Card className="border-dashed">
               <CardContent className="py-8 text-center text-sm text-muted-foreground">
-                {t('No counselors match right now. Try another option or contact the NGO desk.', 'अहिले मिल्दो परामर्शदाता छैन। अर्को विकल्प छान्नुहोस् वा डेस्कमा सम्पर्क गर्नुहोस्।')}
+                {t('No counselors match right now. Try another option or contact the NGO desk.', 'इस समय कोई उपयुक्त परामर्शदाता नहीं है। दूसरा विकल्प आज़माएं या NGO डेस्क से संपर्क करें।')}
               </CardContent>
             </Card>
           ) : (
@@ -442,7 +442,7 @@ const TherapistConnect = () => {
                     </div>
                     <Button className="shrink-0 gap-2 self-start sm:self-end" onClick={() => handleRequestCounselor(c)}>
                       <Shield className="h-4 w-4" />
-                      {t('Request connection', 'जोडन अनुरोध')}
+                      {t('Request connection', 'जुड़ने का अनुरोध करें')}
                     </Button>
                   </div>
                 </CardContent>
@@ -459,13 +459,13 @@ const TherapistConnect = () => {
             ३
           </span>
           <h3 className="font-display text-lg font-semibold text-foreground">
-            {t('Legal rights — audio', 'कानुनी अधिकार — अडियो')}
+            {t('Legal rights — audio', 'कानूनी अधिकार — ऑडियो')}
           </h3>
         </div>
         <p className="text-sm leading-relaxed text-muted-foreground">
           {t(
             'Short colloquial Nepali explainers (3–5 min) from our legal-aid NGO partner — accurate, warm, not jargon.',
-            'छोटा नेपाली व्याख्या (३–५ मिन) — कानुनी सहायता एनजीओ साझेदारसँग; सही, न्यानो, कठिन शब्द बिना।',
+            'हमारे कानूनी-सहायता NGO भागीदार से छोटे स्थानीय व्याख्या (3-5 मिनट) — सटीक, सरल, कोई कठिन शब्द नहीं।',
           )}
         </p>
 
@@ -480,7 +480,7 @@ const TherapistConnect = () => {
                   <div className="min-w-0">
                     <p className="font-medium text-foreground">{ne ? track.titleNe : track.titleEn}</p>
                     <p className="text-xs text-muted-foreground">
-                      {ne ? track.stageNe : track.stageEn} · {track.durationMin} {t('min', 'मिन')}
+                      {ne ? track.stageNe : track.stageEn} · {track.durationMin} {t('min', 'मिनट')}
                     </p>
                     <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{track.descriptionNe}</p>
                   </div>
@@ -494,7 +494,7 @@ const TherapistConnect = () => {
                     <div className="flex items-center gap-2 rounded-lg border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
                       <Volume2 className="h-4 w-4 shrink-0" />
                       <span>
-                        {t('Partner audio — coming to the app soon', 'साझेदार अडियो — छिट्टै एपमा')}
+                        {t('Partner audio — coming to the app soon', 'भागीदार ऑडियो — जल्द ही ऐप पर आ रहा है')}
                       </span>
                     </div>
                   )}
@@ -508,7 +508,7 @@ const TherapistConnect = () => {
           <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
           {t(
             'This is general information, not personal legal advice. For your case, speak with a qualified lawyer or legal aid.',
-            'यो सामान्य जानकारी हो, व्यक्तिगत कानुनी सल्लाह होइन। आफ्नो मुद्दाको लागि वकिल वा कानुनी सहायतासँग कुरा गर्नुहोस्।',
+            'यह सामान्य जानकारी है, व्यक्तिगत कानूनी सलाह नहीं। अपने मामले के लिए, एक योग्य वकील या कानूनी सहायता से बात करें।',
           )}
         </p>
       </section>

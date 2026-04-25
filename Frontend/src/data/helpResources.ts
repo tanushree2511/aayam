@@ -86,7 +86,7 @@ export const SHELTERS: Shelter[] = [
   },
 ];
 
-export type CounselorLanguage = 'ne' | 'ne-en' | 'other';
+export type CounselorLanguage = 'hi' | 'hi-en' | 'other';
 export type CounselorMode = 'voice' | 'in-person';
 
 export type Counselor = {
@@ -108,7 +108,7 @@ export const COUNSELORS: Counselor[] = [
     nameNe: 'सुनिता शर्मा',
     nameEn: 'Sunita Sharma',
     bioNe: '१२ वर्षदेखि महिला हिंसा र ट्रमा परामर्शमा काम गर्दै।',
-    languages: ['ne'],
+    languages: ['hi'],
     isWoman: true,
     modes: ['voice', 'in-person'],
     availabilityWeek: [true, true, false, true, true, false, false],
@@ -118,7 +118,7 @@ export const COUNSELORS: Counselor[] = [
     nameNe: 'प्रिया गुरुङ',
     nameEn: 'Priya Gurung',
     bioNe: 'नेपाली र अङ्ग्रेजीमा परामर्श; सहरी र ग्रामीण दुवै अनुभव।',
-    languages: ['ne-en'],
+    languages: ['hi-en'],
     isWoman: true,
     modes: ['voice'],
     availabilityWeek: [true, false, true, true, false, true, false],
@@ -128,7 +128,7 @@ export const COUNSELORS: Counselor[] = [
     nameNe: 'अमित तामाङ',
     nameEn: 'Amit Tamang',
     bioNe: 'पारिवारिक हिंसा र कानुनी प्रक्रियामा साथ दिने परामर्श।',
-    languages: ['ne-en'],
+    languages: ['hi-en'],
     isWoman: false,
     modes: ['in-person'],
     availabilityWeek: [false, true, true, true, true, true, false],
@@ -138,7 +138,7 @@ export const COUNSELORS: Counselor[] = [
     nameNe: 'रिना के.सी.',
     nameEn: 'Rina K.C.',
     bioNe: 'फोन र अनुहार-अनुहार दुवै — तपाईंको गतिमा।',
-    languages: ['ne'],
+    languages: ['hi'],
     isWoman: true,
     modes: ['voice', 'in-person'],
     availabilityWeek: [true, true, true, true, true, false, false],

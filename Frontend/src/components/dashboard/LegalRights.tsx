@@ -192,11 +192,11 @@ const LegalRights = () => {
       </div>
 
       <PageHeader
-        eyebrow={t('Legal', 'कानुनी')}
-        title={t('Know Your Rights', 'आफ्ना अधिकार जान्नुहोस्')}
+        eyebrow={t('Legal', 'कानूनी')}
+        title={t('Know Your Rights', 'अपने अधिकार जानें')}
         description={t(
           'In plain language, not legal jargon. Knowledge is power.',
-          'सरल भाषामा, कानुनी शब्दावली होइन। ज्ञान शक्ति हो।'
+          'सरल भाषा में, कानूनी शब्दावली नहीं। ज्ञान ही शक्ति है।'
         )}
       />
 

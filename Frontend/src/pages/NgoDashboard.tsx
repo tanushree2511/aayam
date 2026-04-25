@@ -72,7 +72,7 @@ const NgoDashboard = () => {
         });
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : t('Could not load dashboard', 'ड्यासबोर्ड लोड गर्न सकिएन'));
+      setError(e instanceof Error ? e.message : t('Could not load dashboard', 'डैशबोर्ड लोड नहीं हो सका'));
     } finally {
       setLoading(false);
     }
@@ -91,25 +91,25 @@ const NgoDashboard = () => {
 
   const statCards = [
     {
-      label: t('Open cases', 'खुला मुद्दा'),
+      label: t('Open cases', 'खुले केस'),
       value: String(stats.pending_cases),
       icon: ClipboardList,
       color: 'bg-sage-light text-primary',
     },
     {
-      label: t('Resolved', 'समाधान'),
+      label: t('Resolved', 'सुलझ गए'),
       value: String(stats.resolved_cases),
       icon: CheckCircle2,
       color: 'bg-primary/15 text-primary',
     },
     {
-      label: t('Anonymous (open)', 'अज्ञात (खुला)'),
+      label: t('Anonymous (open)', 'अनाम (खुले)'),
       value: String(stats.pending_anonymous),
       icon: Shield,
       color: 'bg-terracotta-light text-terracotta',
     },
     {
-      label: t('New this week', 'यो हप्ता नयाँ'),
+      label: t('New this week', 'इस सप्ताह नए'),
       value: String(stats.incidents_this_week),
       icon: Calendar,
       color: 'bg-rose-soft text-foreground',
@@ -123,10 +123,10 @@ const NgoDashboard = () => {
         <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 md:py-10">
           <PageHeader
             eyebrow={t('Coordinator', 'समन्वयक')}
-            title={t('Case coordination', 'मुद्दा समन्वय')}
+            title={t('Case coordination', 'केस समन्वय')}
             description={t(
               'Assign teams, track progress, and keep survivors informed — all in one place.',
-              'टोली तोक्नुहोस्, प्रगति हेर्नुहोस्, र बाँचेकाहरूलाई जानकारी दिनुहोस् — एकै ठाउँमा।',
+              'टीमें नियुक्त करें, प्रगति ट्रैक करें, और पीड़ितों को सूचित रखें — सब एक जगह।',
             )}
           />
 
@@ -156,13 +156,13 @@ const NgoDashboard = () => {
             <CardContent className="space-y-3 p-4 md:p-5">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  {t('Registered survivors', 'दर्ता प्रयोगकर्ता')}
+                  {t('Registered survivors', 'पंजीकृत उपयोगकर्ता')}
                 </p>
                 {usersLoading ? <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden /> : null}
               </div>
               {registeredUsers.length === 0 && !usersLoading ? (
                 <p className="text-sm text-muted-foreground">
-                  {t('No registered user accounts yet.', 'अझै कुनै दर्ता खाता छैन।')}
+                  {t('No registered user accounts yet.', 'अभी तक कोई पंजीकृत उपयोगकर्ता खाता नहीं है।')}
                 </p>
               ) : (
                 <div className="max-h-56 overflow-auto rounded-xl border border-border/50">
@@ -170,8 +170,8 @@ const NgoDashboard = () => {
                     <thead className="sticky top-0 bg-muted/80 text-xs font-semibold uppercase tracking-wide text-muted-foreground backdrop-blur-sm">
                       <tr>
                         <th className="px-3 py-2">{t('Name', 'नाम')}</th>
-                        <th className="px-3 py-2">{t('Email', 'इमेल')}</th>
-                        <th className="px-3 py-2">{t('District', 'जिल्ला')}</th>
+                        <th className="px-3 py-2">{t('Email', 'ईमेल')}</th>
+                        <th className="px-3 py-2">{t('District', 'ज़िला')}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -192,26 +192,26 @@ const NgoDashboard = () => {
           <Card className="mb-6 rounded-2xl border-border/60 bg-card/90 shadow-sm">
             <CardContent className="space-y-4 p-4 md:p-5">
               <Tabs value={audience} onValueChange={(v) => setAudience(v as typeof audience)} className="w-full">
-                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('Reporter type', 'प्रतिवेदक प्रकार')}</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('Reporter type', 'रिपोर्टर का प्रकार')}</p>
                 <TabsList className="mt-2 flex h-auto min-h-10 w-full flex-wrap gap-1 rounded-xl bg-muted/70 p-1">
                   <TabsTrigger value="all" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                    {t('All', 'सबै')}
+                    {t('All', 'सभी')}
                   </TabsTrigger>
                   <TabsTrigger value="anonymous" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                    {t('Anonymous', 'अज्ञात')}
+                    {t('Anonymous', 'अनाम')}
                   </TabsTrigger>
                   <TabsTrigger value="registered" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                    {t('Registered', 'दर्ता')}
+                    {t('Registered', 'पंजीकृत')}
                   </TabsTrigger>
                 </TabsList>
 
-                <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('Case status', 'मुद्दा स्थिति')}</p>
+                <p className="mt-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('Case status', 'केस की स्थिति')}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {(
                     [
-                      { key: 'all' as const, en: 'All', ne: 'सबै' },
-                      { key: 'pending' as const, en: 'Open', ne: 'खुला' },
-                      { key: 'resolved' as const, en: 'Resolved', ne: 'समाधान' },
+                      { key: 'all' as const, en: 'All', ne: 'सभी' },
+                      { key: 'pending' as const, en: 'Open', ne: 'खुले' },
+                      { key: 'resolved' as const, en: 'Resolved', ne: 'सुलझ गए' },
                     ] as const
                   ).map((opt) => (
                     <Button
@@ -235,7 +235,7 @@ const NgoDashboard = () => {
                   ) : cases.length === 0 ? (
                     <div className="rounded-xl border border-dashed border-border/80 bg-muted/20 py-14 text-center">
                       <Users className="mx-auto mb-3 h-10 w-10 text-muted-foreground/60" aria-hidden />
-                      <p className="text-sm text-muted-foreground">{t('No cases in this view.', 'यो दृश्यमा कुनै मुद्दा छैन।')}</p>
+                      <p className="text-sm text-muted-foreground">{t('No cases in this view.', 'इस दृश्य में कोई केस नहीं है।')}</p>
                     </div>
                   ) : (
                     cases.map((c) => (
