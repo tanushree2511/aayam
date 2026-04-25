@@ -40,6 +40,9 @@ import {
   Volume2,
 } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
+import AILawyerChat from './AILawyerChat';
+import { Scale, HeartHandshake } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const WEEK_LABELS_NE = ['सोम', 'मङ्गल', 'बुध', 'बिहि', 'शुक्र', 'शनि', 'आइत'];
 
@@ -153,8 +156,25 @@ const TherapistConnect = () => {
         )}
       />
 
-      {/* Tier 1 — Immediate */}
-      <section className="space-y-3">
+      <Tabs defaultValue="lawyer" className="w-full space-y-6">
+        <TabsList className="grid w-full grid-cols-2 h-auto p-1 bg-muted/50 rounded-xl">
+          <TabsTrigger value="lawyer" className="data-[state=active]:bg-background rounded-lg py-3 flex items-center gap-2">
+            <Scale className="h-4 w-4" />
+            <span className="font-semibold">{t('Lawyer Consultation', 'वकील परामर्श')}</span>
+          </TabsTrigger>
+          <TabsTrigger value="therapist" className="data-[state=active]:bg-background rounded-lg py-3 flex items-center gap-2">
+            <HeartHandshake className="h-4 w-4" />
+            <span className="font-semibold">{t('Therapist / NGOs', 'थेरेपिस्ट / एनजीओ')}</span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="lawyer">
+          <AILawyerChat />
+        </TabsContent>
+
+        <TabsContent value="therapist" className="space-y-8">
+          {/* Tier 1 — Immediate */}
+          <section className="space-y-3">
         <div className="flex items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-destructive/15 text-sm font-bold text-destructive">
             १
@@ -492,6 +512,8 @@ const TherapistConnect = () => {
           )}
         </p>
       </section>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

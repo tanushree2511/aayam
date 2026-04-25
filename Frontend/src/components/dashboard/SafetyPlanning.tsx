@@ -1,32 +1,68 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Shield, Phone, MapPin, Backpack, FileText, AlertTriangle } from 'lucide-react';
+import { Shield, Phone, MapPin, Backpack, FileText, AlertTriangle, Siren } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 
 const SafetyPlanning = () => {
   const { t } = useLanguage();
 
+  const [sosTriggered, setSosTriggered] = useState(false);
+
   const emergencyItems = [
-    { icon: FileText, text: t('Important documents (citizenship, marriage cert, FIR copy)', 'महत्त्वपूर्ण कागजातहरू (नागरिकता, विवाह प्रमाणपत्र, एफआईआर प्रति)') },
-    { icon: Phone, text: t('Phone with emergency contacts saved', 'आपतकालीन सम्पर्क सुरक्षित गरिएको फोन') },
-    { icon: Backpack, text: t('Small bag with essentials (clothes, medicine)', 'आवश्यक सामानको सानो झोला (कपडा, औषधि)') },
-    { icon: MapPin, text: t('Know the nearest safe house / shelter location', 'नजिकको सुरक्षित घर / आश्रय स्थानको जानकारी') },
+    { icon: FileText, text: t('Important documents (Aadhaar, marriage cert, FIR copy)', 'महत्वपूर्ण दस्तावेज (आधार, विवाह प्रमाणपत्र, FIR कॉपी)') },
+    { icon: Phone, text: t('Phone with emergency contacts saved', 'आपातकालीन संपर्क सहेजे हुए फ़ोन') },
+    { icon: Backpack, text: t('Small bag with essentials (clothes, medicine)', 'ज़रूरी सामान की छोटी बैग (कपड़े, दवाई)') },
+    { icon: MapPin, text: t('Know the nearest safe house / shelter location', 'निकटतम सेफ हाउस / शेल्टर की जानकारी रखें') },
   ];
 
   const contacts = [
-    { name: t('Nepal Police Women Cell', 'नेपाल प्रहरी महिला सेल'), number: '1145' },
-    { name: t('National Women Commission', 'राष्ट्रिय महिला आयोग'), number: '01-4354109' },
-    { name: t('WOREC Nepal', 'वर्क नेपाल'), number: '01-5006373' },
-    { name: t('Maiti Nepal', 'माइती नेपाल'), number: '01-4492904' },
+    { name: t('Women Helpline (NCW)', 'महिला हेल्पलाइन (NCW)'), number: '181' },
+    { name: t('Police Emergency', 'पुलिस आपातकालीन'), number: '112' },
+    { name: t('Domestic Violence Helpline', 'घरेलू हिंसा हेल्पलाइन'), number: '1091' },
+    { name: t('National Commission for Women', 'राष्ट्रीय महिला आयोग'), number: '7827-170-170' },
   ];
+
+  const handleSOS = () => {
+    setSosTriggered(true);
+    // Open the phone dialer with emergency number
+    window.location.href = 'tel:112';
+    // Reset after 3 seconds
+    setTimeout(() => setSosTriggered(false), 3000);
+  };
 
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow={t('Protection', 'सुरक्षा')}
         title={t('Safety Planning', 'सुरक्षा योजना')}
-        description={t('Practical, not clinical. Your safety comes first.', 'व्यावहारिक, क्लिनिकल होइन। तपाईंको सुरक्षा पहिलो हो।')}
+        description={t('Practical, not clinical. Your safety comes first.', 'व्यावहारिक, चिकित्सीय नहीं। आपकी सुरक्षा पहले।')}
       />
+
+      {/* SOS Button */}
+      <div className="flex justify-center py-4">
+        <button
+          onClick={handleSOS}
+          className={`relative group flex flex-col items-center justify-center w-40 h-40 rounded-full border-4 transition-all duration-300 shadow-lg ${
+            sosTriggered
+              ? 'bg-destructive border-destructive/80 scale-95'
+              : 'bg-destructive/90 border-destructive/60 hover:bg-destructive hover:scale-105 hover:shadow-xl'
+          }`}
+          aria-label="SOS Emergency Button"
+        >
+          <Siren className={`h-10 w-10 text-white mb-1 ${sosTriggered ? '' : 'group-hover:animate-bounce'}`} />
+          <span className="text-white text-2xl font-black tracking-widest">SOS</span>
+          <span className="text-white/80 text-[10px] mt-1 font-medium">
+            {t('TAP TO CALL 112', '112 कॉल करें')}
+          </span>
+          {/* Pulse ring animation */}
+          {!sosTriggered && (
+            <>
+              <span className="absolute inset-0 rounded-full border-2 border-destructive/40 animate-ping" />
+              <span className="absolute -inset-2 rounded-full border border-destructive/20 animate-pulse" />
+            </>
+          )}
+        </button>
+      </div>
 
       <Card className="rounded-2xl border-destructive/25 bg-destructive/5 shadow-sm">
         <CardContent className="flex items-center gap-3 p-4 md:p-5">

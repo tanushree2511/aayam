@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { recordAgencyDecision, getJourneyDayCount, getTierFromJourney } from '@/lib/journeyStorage';
 import { clientLocalDateKey } from '@/lib/restorationApi';
 import AgencyTrail from '@/components/dashboard/AgencyTrail';
+import MoodAnalysis from '@/components/dashboard/MoodAnalysis';
 import { MOOD_HEX, moodHeroGradient } from '@/lib/moodTheme';
 
 // ─── Choice Banks ────────────────────────────────────────────────────────────
@@ -96,6 +97,7 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
   const [textVal, setTextVal] = useState('');
   const [sliding, setSliding] = useState(false);
   const [pulse, setPulse]     = useState(false);
+  const [userAnswers, setUserAnswers] = useState<{ id: string; answer: string }[]>([]);
 
   useEffect(() => {
     if (!restorationReady || !restoration) return;
@@ -103,6 +105,7 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
       setStep(restoration.daily_restoration_step);
     } else {
       setStep(0);
+      setUserAnswers([]);
       if (
         restoration.daily_restoration_date != null &&
         restoration.daily_restoration_date !== today
@@ -120,6 +123,7 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
 
   const submit = (val: string) => {
     recordAgencyDecision(current.id);
+    setUserAnswers(prev => [...prev, { id: current.id, answer: val }]);
     setTextVal('');
     const todayStr = clientLocalDateKey();
     const nextStep = step === choices.length - 1 ? choices.length : step + 1;
@@ -170,6 +174,13 @@ const TodayScreen = ({ moodColor = 'green' }: TodayScreenProps) => {
           .dots-pulse .progress-dot { animation: pulseScale 1s ease-out; background: var(--mood-accent, #e08080) !important; }
         `}
       </style>
+
+      {/* Tier 1 Completion - AI Analysis */}
+      {step >= choices.length && (
+        <div className="mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+           <MoodAnalysis answers={userAnswers} moodColor={moodColor} />
+        </div>
+      )}
 
       {/* Hero Banner */}
       <div className="pb-6" style={{ fontFamily: 'DM Sans, sans-serif' }}>

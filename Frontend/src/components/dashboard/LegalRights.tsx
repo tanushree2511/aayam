@@ -22,7 +22,7 @@ interface Message {
 }
 
 const LegalRights = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const [open, setOpen] = useState(false);
   const [selectedRight, setSelectedRight] = useState<any>(null);
