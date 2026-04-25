@@ -8,8 +8,30 @@ const INTRO_STORAGE_KEY = 'sangai-chat-intro-v1';
 
 const API_BASE = getMainApiBase();
 
+// Detect whether a message is Hindi (Devanagari), English, or Hinglish (Roman Hindi)
+function detectLanguage(text: string): 'hindi' | 'english' | 'hinglish' {
+  const devanagariChars = (text.match(/[\u0900-\u097F]/g) || []).length;
+  const latinChars = (text.match(/[a-zA-Z]/g) || []).length;
+  const totalChars = devanagariChars + latinChars;
+  if (totalChars === 0) return 'hinglish';
+  const devanagariRatio = devanagariChars / totalChars;
+  if (devanagariRatio > 0.5) return 'hindi';
+  // Check for common Hinglish words/patterns
+  const hinglishPatterns = /\b(kya|hai|hain|nahi|nahin|mujhe|mera|tera|aap|tum|hum|yeh|woh|karo|karni|chahiye|hua|hui|raha|rahi|bhi|aur|lekin|phir|abhi|jab|tab|kaisa|kaisi|theek|bilkul|accha|shukriya|dhanyawad|baat|kuch|sab|bahut|zyada|thoda|dono|pehle|baad|saath|ghar|kaam|din|raat|log|dost|bhai|didi|mama|papa)\b/i;
+  if (hinglishPatterns.test(text) && devanagariRatio < 0.3) return 'hinglish';
+  return 'english';
+}
+
 const SANGAI_SYSTEM_PROMPT =
-  "[CRITICAL LANGUAGE RULE: You MUST detect the user's language from their message and reply in the SAME language and script. If the user writes in English, you MUST reply ONLY in English. If the user writes in Hindi using Devanagari script (हिंदी), you MUST reply ONLY in Devanagari Hindi. If the user writes in Hinglish (Hindi words in Latin/English alphabet), reply in Hinglish. NEVER mix scripts. NEVER reply in Devanagari if the user wrote in English.] You are Sangai, an Indian women's legal AI assistant and daily companion. You explain women's legal rights in plain language, walk users through legal processes step-by-step, and connect them to verified legal aid resources. Listen first, reflect back, and normalize her experiences. If she explicitly asks to connect to legal help, a therapist, or an NGO, or if you feel she needs immediate professional help, you MUST include the exact text SHOW_HELP_BUTTON in your response so the system can show her the connect button. You speak like a trusted older sister, in simple colloquial language.";
+  'You are Sangai, a warm and trusted Indian women\'s legal AI companion — like an older didi (sister) who listens without judgment. You explain women\'s legal rights in plain language, walk users through legal processes step-by-step, and connect them to verified legal aid resources in India. Listen first, reflect their feelings, and normalize their experiences.' +
+  '\n\n' +
+  'LANGUAGE RULES — ABSOLUTE, NEVER BREAK:' +
+  '\n1. If the user writes in HINDI (Devanagari script, e.g. मुझे मदद चाहिए): Reply ONLY in Devanagari Hindi. Zero English words.' +
+  '\n2. If the user writes in ENGLISH (e.g. "I need help"): Reply ONLY in English. Zero Hindi or Devanagari.' +
+  '\n3. If the user writes in HINGLISH (Roman-script Hindi, e.g. "mujhe help chahiye", "kya karu main"): Reply ONLY in Hinglish — Hindi words written in Latin script. Zero Devanagari.' +
+  '\nNEVER switch languages mid-response. Mirror the user\'s language exactly on every single reply.' +
+  '\n\n' +
+  'If the user explicitly asks to connect to legal help, a therapist, or an NGO — or if you sense she is in immediate distress — include the exact token SHOW_HELP_BUTTON anywhere in your response so the UI can show her the connect button.';
 
 interface Message {
   id: string;
@@ -283,18 +305,38 @@ const Chatbot = () => {
     setIsAwaitingResponse(true);
     setBubbleMode('typing');
 
+    // Build history for API — keep display text clean but tag the API payload
     const historyForApi = [...messages, userMsg].map((m) => ({
       role: m.role === 'bot' ? ('assistant' as const) : ('user' as const),
       content: m.text,
     }));
+
+    // Detect language from the CURRENT message only (not history)
+    const detectedLang = detectLanguage(textToSend);
+    const langTag =
+      detectedLang === 'hindi'
+        ? '[LANGUAGE:HINDI] You MUST reply in Devanagari Hindi script only.'
+        : detectedLang === 'hinglish'
+        ? '[LANGUAGE:HINGLISH] You MUST reply in Hinglish — Roman script Hindi only. No Devanagari.'
+        : '[LANGUAGE:ENGLISH] You MUST reply in English only. No Hindi, no Devanagari.';
+
+    // KEY FIX: Inject the language tag directly into the last user message in the API payload.
+    // This overrides conversation-history bias — the model reads it right before responding.
+    const historyWithLangTag = historyForApi.map((m, idx) =>
+      idx === historyForApi.length - 1 && m.role === 'user'
+        ? { ...m, content: `${langTag}\n\n${m.content}` }
+        : m
+    );
+
+    const systemWithLang = SANGAI_SYSTEM_PROMPT + '\n\n' + langTag;
 
     try {
       const response = await fetch(`${API_BASE}/chat/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_prompt: SANGAI_SYSTEM_PROMPT,
-          messages: historyForApi,
+          system_prompt: systemWithLang,
+          messages: historyWithLangTag,
         }),
       });
 
