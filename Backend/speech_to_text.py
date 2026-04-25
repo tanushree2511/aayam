@@ -24,12 +24,12 @@ class TranscriptionResponse(BaseModel):
 async def transcribe_audio(
     file: UploadFile = File(..., description="Audio file to transcribe"),
     api_key: Annotated[str, Header(alias="X-Sarvam-API-Key")] = None,
-    language_code: str = "ne-IN",
+    language_code: str = "hi-IN",
     mode: str = "transcribe",
     model: str = "saaras:v3",
 ):
     """
-    Transcribe Nepali audio using Sarvam AI.
+    Transcribe Hindi audio using Sarvam AI.
     """
     api_key_to_use = api_key or os.getenv("SARVAM_API_KEY")
     if not api_key_to_use:
@@ -98,10 +98,10 @@ async def transcribe_audio(
 async def transcribe_and_translate(
     file: UploadFile = File(...),
     api_key: Annotated[str, Header(alias="X-Sarvam-API-Key")] = None,
-    language_code: str = "ne-IN",
+    language_code: str = "hi-IN",
 ):
     """
-    Transcribe Nepali speech AND translate it to English in one shot.
+    Transcribe Hindi speech AND translate it to English in one shot.
     Uses saaras:v3 with mode=translate.
     """
     api_key_to_use = api_key or os.getenv("SARVAM_API_KEY")

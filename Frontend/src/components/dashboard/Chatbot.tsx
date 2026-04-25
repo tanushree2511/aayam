@@ -9,7 +9,7 @@ const INTRO_STORAGE_KEY = 'sangai-chat-intro-v1';
 const API_BASE = getMainApiBase();
 
 const SANGAI_SYSTEM_PROMPT =
-  '[You should answer only in clean, precise Nepali. Do not mix Hindi.] You are Sangai, a warm daily companion for Nepali women. You do not know what brought her here and you do not assume she is in crisis. You listen first. You ask one gentle question at a time. You reflect back what she says in simple words before asking anything. You never use clinical language and you never diagnose. You normalize whatever she shares as a real human experience. If she discloses domestic violence, stay with her first; then gently ask once if she would like to hear about resources — do not redirect immediately. If she discloses thoughts of self-harm, respond with warmth and give the Nepal women\'s helpline 1145 immediately, and do not move on until you have. You speak like a trusted older sister, in simple colloquial Nepali, never formal or legal tone.';
+  "[MATCH THE USER'S LANGUAGE AND SCRIPT STRICTLY. If the user speaks English, reply in English. If they speak Hindi in Devanagari (हिंदी), reply in Devanagari. If they speak Hinglish (Hindi in English alphabet), reply in Hinglish.] You are Sangai, an Indian women's legal AI assistant and daily companion. You explain women's legal rights in plain language, walk users through legal processes step-by-step, and connect them to verified legal aid resources. Listen first, reflect back, and normalize her experiences. If she explicitly asks to connect to legal help, a therapist, or an NGO, or if you feel she needs immediate professional help, you MUST include the exact text SHOW_HELP_BUTTON in your response so the system can show her the connect button. You speak like a trusted older sister, in simple colloquial language.";
 
 interface Message {
   id: string;
@@ -18,13 +18,18 @@ interface Message {
 }
 
 const INTRO_LINES = [
-  { size: 28 as const, weight: 500 as const, muted: false, text: 'नमस्ते 🙏' },
-  { size: 20 as const, muted: false, text: 'आज के छ मनमा?' },
-  { size: 18 as const, muted: true, text: 'म सङ्गै — दिदी जस्तै साथी।' },
-  { size: 18 as const, muted: true, text: 'जे भए पनि, एक्लो हुनु पर्दैन।' },
+  { size: 28 as const, weight: 500 as const, muted: false, text: 'Namaste 🙏' },
+  { size: 20 as const, muted: false, text: 'Aaj aap kya feel kar rahe ho?' },
+  { size: 18 as const, muted: true, text: 'Main aapke saath hoon — ek trusted dost ki tarah.' },
+  { size: 18 as const, muted: true, text: 'Jo bhi ho, aap akela nahi ho.' },
 ];
 
-const STARTER_PILLS = ['आज थकाई लाग्यो', 'मन अलमलिएको छ', 'बस कुरा गर्नु छ'];
+
+const STARTER_PILLS = [
+  'Aaj thoda tired hoon',
+  'Mujhe confusion ho raha hai',
+  'Bas baat karni hai'
+];
 
 const CONTENT_BG = '#faf8f4';
 
@@ -32,10 +37,10 @@ const bubbleEnter = { duration: 0.4, ease: 'easeOut' as const };
 
 function getTimeBasedGreeting(): string {
   const h = new Date().getHours();
-  if (h < 12) return 'शुभ बिहान। आज उठ्दा मन कस्तो थियो?';
-  if (h < 17) return 'नमस्ते। आज दिन कस्तो गइरहेको छ?';
-  if (h < 21) return 'साँझ परिसक्यो। आज कस्तो दिन गयो?';
-  return 'राति ढिलो छ। के मनमा कुरा छ?';
+  if (h < 12) return 'Good morning. Aaj kaise feel kar rahe ho?';
+  if (h < 17) return 'Namaste. Aaj ka din kaisa ja raha hai?';
+  if (h < 21) return 'Good evening. Aaj ka din kaisa tha?';
+  return 'It’s late. Kya baat karni hai?';
 }
 
 function useStableTimeGreeting(): string {
@@ -241,7 +246,7 @@ const Chatbot = () => {
     setIsProcessingVoice(true);
     const formData = new FormData();
     formData.append('file', audioBlob, 'recording.webm');
-    formData.append('language_code', 'ne-IN');
+    formData.append('language_code', 'hi-IN');
 
     try {
       const response = await fetch(`${API_BASE}/stt/transcribe`, {
@@ -309,7 +314,7 @@ const Chatbot = () => {
       setBubbleMode('sangai');
     } catch (error) {
       console.error('Error calling chat API:', error);
-      const errText = 'माफ गर्नुहोस्, म अहिलै कनेक्ट गर्न समस्यामा छु।';
+      const errText = 'Maaf kijiye, abhi connect karne mein samasya ho rahi hai.';
       setMessages((prev) => [...prev, { id: `b-${Date.now()}`, role: 'bot', text: errText }]);
       await new Promise((r) => setTimeout(r, 200));
       setBubbleMode('sangai');
@@ -456,18 +461,38 @@ const Chatbot = () => {
                           className={
                             msg.role === 'user'
                               ? 'flex w-full justify-end'
-                              : 'w-full text-center'
+                              : 'flex w-full justify-start'
                           }
                         >
                           {msg.role === 'user' ? (
                             <div
-                              className="max-w-[85%] rounded-[18px] rounded-br-[4px] px-[14px] py-2 text-left text-[15px] leading-relaxed text-white"
+                              className="max-w-[85%] rounded-[18px] rounded-br-[4px] px-[14px] py-2 text-left text-[15px] leading-relaxed text-white shadow-sm"
                               style={{ background: '#7F77DD' }}
                             >
                               {msg.text}
                             </div>
                           ) : (
-                            <p className="whitespace-pre-wrap px-1">{msg.text}</p>
+                            <div className="flex max-w-[90%] flex-col items-start gap-2">
+                              <div
+                                className="rounded-[18px] rounded-bl-[4px] px-[14px] py-2.5 text-left text-[15px] leading-relaxed text-[hsl(var(--foreground))] shadow-sm"
+                                style={{ background: 'var(--color-background-secondary)' }}
+                              >
+                                <p className="whitespace-pre-wrap">
+                                  {msg.text
+                                    .replace(/\[?SHOW_HELP_BUTTON\]?/g, '')
+                                    .trim()}
+                                </p>
+                              </div>
+                              {msg.text.includes('SHOW_HELP_BUTTON') && (
+                                <button
+                                  type="button"
+                                  onClick={() => window.dispatchEvent(new Event('open-therapist-tab'))}
+                                  className="mt-1 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+                                >
+                                  Connect to Therapist / NGOs
+                                </button>
+                              )}
+                            </div>
                           )}
                         </motion.div>
                       ))}
@@ -557,8 +582,8 @@ const Chatbot = () => {
                 disabled={inputDisabled}
                 placeholder={
                   isListening
-                    ? 'सुन्दै छु...'
-                    : 'यहाँ लेख्नुस् वा माइक थिच्नुस्...'
+                    ? 'Sun rahi hoon...'
+                    : 'Yahan likhiye ya mic dabayein...'
                 }
                 className="min-h-[48px] min-w-0 flex-1 rounded-[24px] bg-[var(--color-background-secondary)] px-[18px] py-3 text-[15px] text-[hsl(var(--foreground))] outline-none ring-0 placeholder:text-[hsl(var(--muted-foreground))] focus:outline-none disabled:opacity-60"
               />

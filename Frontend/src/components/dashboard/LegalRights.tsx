@@ -9,364 +9,145 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Mic, MicOff } from 'lucide-react';
 import MannKoKura from '@/components/dashboard/MannKoKura';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { getMainApiBase } from '@/lib/apiBase';
+
+const API_BASE = getMainApiBase();
+
+interface Message {
+  role: 'user' | 'bot';
+  text: string;
+}
 
 const LegalRights = () => {
   const { t } = useLanguage();
 
   const [open, setOpen] = useState(false);
   const [selectedRight, setSelectedRight] = useState<any>(null);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isProcessingVoice, setIsProcessingVoice] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const audioChunks = useRef<Blob[]>([]);
 
   const chatRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     chatRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, isLoading]);
 
-  // 🧠 Q&A DATABASE WITH DEFINITIONS
-  const qaDB = {
-    mental_health_access: {
-      definition:
-        'The right to mental healthcare means every person can access mental health services like counseling, therapy, and treatment. These services should be available, affordable, and provided without discrimination.',
-      qa: [
-        {
-          questions: [
-            'what is mental healthcare',
-            'define mental healthcare',
-            'right to mental healthcare meaning',
-            'explain mental health rights',
-          ],
-          answer:
-            'It means you have the right to access mental health services like counseling, therapy, and treatment without discrimination.',
-        },
-        {
-          questions: [
-            'free mental health treatment',
-            'is therapy free',
-            'cost of mental healthcare',
-            'afford therapy',
-          ],
-          answer:
-            'Basic mental health services are often free or low-cost in government hospitals and NGOs.',
-        },
-        {
-          questions: [
-            'where to go for mental help',
-            'i feel depressed where to go',
-            'mental health support',
-            'need counseling help',
-          ],
-          answer:
-            'You can visit government hospitals, mental health centers, NGOs, or contact helplines for support.',
-        },
-        {
-          questions: [
-            'can i go without family knowing',
-            'private counseling',
-            'confidential therapy',
-          ],
-          answer:
-            'Yes, you have the right to seek mental health care privately without informing your family.',
-        },
-        {
-          questions: [
-            'can i stop treatment',
-            'refuse therapy',
-            'leave treatment',
-          ],
-          answer:
-            'Yes, you have the right to consent to or refuse treatment at any time.',
-        },
-        {
-          questions: [
-            'suicidal thoughts help',
-            'i feel like ending life',
-            'urgent mental help',
-          ],
-          answer:
-            'Please seek immediate help from a helpline, hospital, or trusted person. You are not alone and support is available.',
-        },
-      ],
-    },
+  const toggleVoice = async () => {
+    if (isListening) {
+      if (mediaRecorder) {
+        mediaRecorder.stop();
+        setIsListening(false);
+      }
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        audioChunks.current = [];
 
-    mental_health_dignity: {
-      definition:
-        'The right to equality means all individuals are treated equally under the law without discrimination based on gender, caste, religion, identity, or background.',
-      qa: [
-        {
-          questions: [
-            'what is equality',
-            'define equality',
-            'equal rights meaning',
-          ],
-          answer:
-            'Equality means everyone is treated fairly and equally under the law without discrimination.',
-        },
-        {
-          questions: [
-            'what is discrimination',
-            'define discrimination',
-            'unfair treatment meaning',
-          ],
-          answer:
-            'Discrimination means treating someone unfairly because of their gender, caste, religion, or identity.',
-        },
-        {
-          questions: [
-            'treated unfairly at work',
-            'workplace discrimination',
-            'job inequality',
-          ],
-          answer:
-            'You have the right to equal treatment at work. You can file a complaint or seek legal help.',
-        },
-        {
-          questions: [
-            'caste discrimination',
-            'gender discrimination',
-            'religion discrimination',
-          ],
-          answer:
-            'Discrimination based on caste, gender, or religion is illegal and punishable.',
-        },
-        {
-          questions: [
-            'lgbt rights nepal',
-            'are lgbt protected',
-            'sexual identity rights',
-          ],
-          answer:
-            'Yes, Nepal recognizes and protects LGBTQ+ rights under equality laws.',
-        },
-        {
-          questions: [
-            'family treats me unfairly',
-            'unequal treatment at home',
-          ],
-          answer:
-            'You can seek support or legal help if you are treated unfairly even within your family.',
-        },
-      ],
-    },
+        recorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            audioChunks.current.push(event.data);
+          }
+        };
 
-    mental_health_privacy: {
-      definition:
-        'Confidentiality means your personal and medical information must be kept private and cannot be shared without your consent, except in legal or emergency situations.',
-      qa: [
-        {
-          questions: [
-            'what is confidentiality',
-            'define confidentiality',
-            'privacy meaning',
-          ],
-          answer:
-            'Confidentiality means your personal and medical information must remain private.',
-        },
-        {
-          questions: [
-            'can doctor share my data',
-            'doctor share records',
-            'medical privacy',
-          ],
-          answer:
-            'No, doctors cannot share your information without your permission unless required by law.',
-        },
-        {
-          questions: [
-            'family access records',
-            'can parents see my data',
-          ],
-          answer:
-            'No, your family cannot access your medical records without your consent.',
-        },
-        {
-          questions: ['data leak what to do', 'privacy violation'],
-          answer:
-            'You can file a complaint and take legal action if your data is leaked.',
-        },
-        {
-          questions: ['online counseling safe', 'is therapy private online'],
-          answer:
-            'Yes, trusted platforms ensure confidentiality and data protection.',
-        },
-        {
-          questions: ['can i stay anonymous', 'anonymous help'],
-          answer:
-            'Yes, many services allow you to seek help anonymously.',
-        },
-      ],
-    },
+        recorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunks.current, { type: 'audio/webm' });
+          stream.getTracks().forEach((track) => track.stop());
+          await processVoiceInput(audioBlob);
+        };
 
-    dv_report: {
-      definition:
-        'Domestic violence includes physical, emotional, sexual, or economic abuse within a household or relationship.',
-      qa: [
-        {
-          questions: [
-            'what is domestic violence',
-            'define abuse at home',
-          ],
-          answer:
-            'Domestic violence includes physical, emotional, sexual, or economic abuse within a household.',
-        },
-        {
-          questions: [
-            'how to report abuse',
-            'where report domestic violence',
-            'file complaint abuse',
-          ],
-          answer:
-            'You can report domestic violence at any police station.',
-        },
-        {
-          questions: [
-            'emotional abuse valid',
-            'no physical injury abuse',
-          ],
-          answer:
-            'Yes, emotional and non-physical abuse are also recognized under the law.',
-        },
-        {
-          questions: ['proof required', 'evidence needed'],
-          answer:
-            'Evidence like messages or photos helps, but you can still file a complaint without it.',
-        },
-        {
-          questions: ['someone else report', 'can friend report'],
-          answer:
-            'Yes, someone else can report on your behalf.',
-        },
-        {
-          questions: ['after complaint what happens', 'police action after report'],
-          answer:
-            'Police may investigate and take legal action to protect you.',
-        },
-      ],
-    },
-
-    dv_protection: {
-      definition:
-        'A protection order is a legal order issued by a court to prevent an abuser from contacting or harming the victim.',
-      qa: [
-        {
-          questions: [
-            'what is protection order',
-            'restraining order meaning',
-          ],
-          answer:
-            'It is a legal order that prevents the abuser from contacting or harming you.',
-        },
-        {
-          questions: ['how to apply protection order', 'get court protection'],
-          answer: 'You can apply for a protection order through the court.',
-        },
-        {
-          questions: ['need lawyer protection order'],
-          answer:
-            'A lawyer is not required, and free legal aid is available.',
-        },
-        {
-          questions: ['violate protection order'],
-          answer:
-            'If violated, the abuser can face legal penalties or arrest.',
-        },
-        {
-          questions: ['immediate protection'],
-          answer:
-            'Courts can issue temporary protection quickly in urgent cases.',
-        },
-      ],
-    },
-
-    legal_aid: {
-      definition:
-        'Free legal aid means legal services are provided at no cost to people who cannot afford a lawyer.',
-      qa: [
-        {
-          questions: ['what is legal aid', 'free lawyer meaning'],
-          answer:
-            'Legal aid provides free legal services to those who cannot afford a lawyer.',
-        },
-        {
-          questions: ['who eligible legal aid', 'who gets free lawyer'],
-          answer:
-            'Low-income individuals and vulnerable groups are eligible.',
-        },
-        {
-          questions: ['how apply legal aid', 'get free lawyer'],
-          answer:
-            'You can apply through legal aid offices or NGOs.',
-        },
-        {
-          questions: ['legal aid domestic violence'],
-          answer:
-            'Yes, domestic violence victims can receive free legal support.',
-        },
-        {
-          questions: ['documents needed legal aid'],
-          answer:
-            'Basic identification and proof of income may be required.',
-        },
-      ],
-    },
+        recorder.start();
+        setMediaRecorder(recorder);
+        setIsListening(true);
+      } catch (err) {
+        console.error('Error accessing microphone:', err);
+      }
+    }
   };
 
-  // 🧠 RESPONSE ENGINE
-  const getBotResponse = (query: string, right: any) => {
-    if (!right) return 'Please select a legal topic first.';
+  const processVoiceInput = async (audioBlob: Blob) => {
+    setIsProcessingVoice(true);
+    const formData = new FormData();
+    formData.append('file', audioBlob, 'recording.webm');
+    formData.append('language_code', 'hi-IN'); // Support Hindi/English mix
 
-    const q = query.toLowerCase();
-    const data = qaDB[right.context];
+    try {
+      const response = await fetch(`${API_BASE}/stt/transcribe`, {
+        method: 'POST',
+        body: formData,
+      });
 
-    for (const item of data.qa) {
-      if (item.questions.some((ques) => q.includes(ques))) {
-        return `${item.answer} (Legal Basis: ${right.law})`;
+      if (!response.ok) {
+        throw new Error('Failed to transcribe audio');
       }
-    }
 
-    if (q.includes('what is') || q.includes('define')) {
-      return `${data.definition} (Legal Basis: ${right.law})`;
-    }
-
-    let bestMatch = null;
-    let maxScore = 0;
-
-    for (const item of data.qa) {
-      let score = 0;
-      for (const word of item.questions.join(' ').split(' ')) {
-        if (q.includes(word)) score++;
+      const data = await response.json();
+      if (data.transcript) {
+        await handleSend(data.transcript);
       }
-      if (score > maxScore) {
-        maxScore = score;
-        bestMatch = item;
-      }
+    } catch (error) {
+      console.error('Error with STT API:', error);
+    } finally {
+      setIsProcessingVoice(false);
     }
-
-    if (bestMatch) {
-      return `${bestMatch.answer} (Legal Basis: ${right.law})`;
-    }
-
-    return `${data.definition} (Legal Basis: ${right.law})`;
   };
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = async (overrideText?: string) => {
+    const textToSend = typeof overrideText === 'string' ? overrideText : input;
+    if (!textToSend.trim() || isLoading) return;
 
-    const userMsg = { role: 'user', text: input };
-    const botMsg = { role: 'bot', text: getBotResponse(input, selectedRight) };
-
-    setMessages((prev) => [...prev, userMsg, botMsg]);
+    const userText = textToSend.trim();
+    const newMessages: Message[] = [...messages, { role: 'user', text: userText }];
+    setMessages(newMessages);
     setInput('');
+    setIsLoading(true);
+
+    const systemPrompt = `[MATCH THE USER'S LANGUAGE AND SCRIPT STRICTLY. If the user speaks English, reply in English. If they speak Hindi in Devanagari (हिंदी), reply in Devanagari. If they speak Hinglish (Hindi in English alphabet), reply in Hinglish.] You are an Indian Women's Legal Assistant. You are currently helping a user specifically understand their "${selectedRight.title}". Law: ${selectedRight.law}. Context: ${selectedRight.desc}. Only answer questions related to this right. Be concise, supportive, and extremely clear about the steps they can take.`;
+
+    // Filter out the initial greeting from the history sent to the API
+    const apiMessages = newMessages
+      .filter((m) => m.text !== `You selected "${selectedRight.title}". Ask your question below, and I will guide you based on Indian Law.`)
+      .map((m) => ({
+        role: m.role === 'bot' ? 'assistant' : 'user',
+        content: m.text,
+      }));
+
+    try {
+      const response = await fetch(`${API_BASE}/chat/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_prompt: systemPrompt,
+          messages: apiMessages,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch from LLM');
+
+      const data = await response.json();
+      const botResponse = data.choices?.[0]?.message?.content || 'मुझे खेद है, मुझे जवाब देने में समस्या हो रही है।';
+
+      setMessages((prev) => [...prev, { role: 'bot', text: botResponse }]);
+    } catch (error) {
+      console.error(error);
+      setMessages((prev) => [...prev, { role: 'bot', text: 'मुझे खेद है, मुझे जवाब देने में समस्या हो रही है। कृपया बाद में प्रयास करें।' }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCardClick = (right: any) => {
     setSelectedRight(right);
     setMessages([
-      { role: 'bot', text: `You selected "${right.title}". Ask your question.` },
+      { role: 'bot', text: `You selected "${right.title}". Ask your question below, and I will guide you based on Indian Law.` },
     ]);
     setOpen(true);
   };
@@ -374,39 +155,33 @@ const LegalRights = () => {
   const rights = [
     {
       title: 'Right to Mental Healthcare',
-      desc: 'Access mental health services in Nepal.',
-      law: 'Article 35 of Constitution of Nepal',
-      context: 'mental_health_access',
+      desc: 'Access mental health services in India.',
+      law: 'The Mental Healthcare Act, 2017',
     },
     {
-      title: 'Right to Equality',
+      title: 'Right to Equality & Dignity',
       desc: 'Equal protection and no discrimination.',
-      law: 'Article 18 of Constitution of Nepal',
-      context: 'mental_health_dignity',
+      law: 'Article 14 & 21 of Constitution of India',
     },
     {
-      title: 'Right to Confidentiality',
+      title: 'Right to Privacy & Confidentiality',
       desc: 'Your mental health data must remain private.',
-      law: 'Public Health Service Act 2018',
-      context: 'mental_health_privacy',
+      law: 'Article 21 (Puttaswamy) & IT Act, 2000',
     },
     {
       title: 'File Domestic Violence Complaint',
-      desc: 'Report abuse at any police station.',
-      law: 'Domestic Violence Act 2066',
-      context: 'dv_report',
+      desc: 'Report abuse and seek protection.',
+      law: 'Protection of Women from Domestic Violence Act, 2005',
     },
     {
       title: 'Protection Order',
       desc: 'Court protection from abuser.',
-      law: 'Domestic Violence Act 2066',
-      context: 'dv_protection',
+      law: 'Section 18 of PWDVA, 2005',
     },
     {
       title: 'Free Legal Aid',
       desc: 'Free lawyer support if needed.',
-      law: 'Legal Aid Act 2054',
-      context: 'legal_aid',
+      law: 'Legal Services Authorities Act, 1987',
     },
   ];
 
@@ -447,38 +222,66 @@ const LegalRights = () => {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>{selectedRight?.title}</DialogTitle>
           </DialogHeader>
 
-          <div className="h-64 overflow-y-auto space-y-3 border p-3 bg-muted/30 rounded-lg">
+          <div className="h-[50vh] max-h-96 overflow-y-auto space-y-4 border p-4 bg-muted/30 rounded-lg">
             {messages.map((msg, i) => (
               <div
                 key={i}
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm shadow-sm break-words ${
+                  className={`max-w-[85%] px-4 py-2.5 rounded-2xl text-sm shadow-sm break-words whitespace-pre-wrap ${
                     msg.role === 'user'
                       ? 'bg-primary text-white rounded-br-md'
-                      : 'bg-white text-gray-800 border rounded-bl-md'
+                      : 'bg-white text-foreground border rounded-bl-md'
                   }`}
                 >
                   {msg.text}
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-white border text-foreground px-4 py-2.5 rounded-2xl rounded-bl-md text-sm shadow-sm flex items-center gap-2">
+                  <span className="flex gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: '300ms' }} />
+                  </span>
+                </div>
+              </div>
+            )}
             <div ref={chatRef} />
           </div>
 
-          <div className="flex gap-2 mt-3">
+          <div className="flex gap-2 pt-2 items-center">
+            <button
+              type="button"
+              onClick={toggleVoice}
+              disabled={isProcessingVoice || isLoading}
+              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition-colors ${
+                isListening
+                  ? 'bg-destructive/15 text-destructive'
+                  : 'bg-muted hover:bg-muted/80 text-muted-foreground'
+              } disabled:opacity-50`}
+            >
+              {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+            </button>
             <Input
-              placeholder="Ask your question..."
+              placeholder={isListening ? "Listening..." : "Type your question..."}
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+              disabled={isLoading || isListening || isProcessingVoice}
+              className="flex-1"
             />
-            <Button onClick={handleSend}>Send</Button>
+            <Button onClick={() => handleSend()} disabled={isLoading || isProcessingVoice || !input.trim()}>
+              Send
+            </Button>
           </div>
         </DialogContent>
       </Dialog>

@@ -74,6 +74,12 @@ const UserDashboard = () => {
     if (selectedMood) applyMoodThemeFromKey(selectedMood);
   }, [selectedMood]);
 
+  useEffect(() => {
+    const handleOpenTherapist = () => setActiveTab('therapist');
+    window.addEventListener('open-therapist-tab', handleOpenTherapist);
+    return () => window.removeEventListener('open-therapist-tab', handleOpenTherapist);
+  }, []);
+
   if (!authReady) {
     return <div className="min-h-screen bg-background" aria-busy="true" />;
   }
