@@ -7,6 +7,19 @@ import { Scale, FileDown, Send, Loader2, User, Bot, AlertCircle } from 'lucide-r
 import { getMainApiBase } from '@/lib/apiBase';
 import { jsPDF } from 'jspdf';
 
+// Detect whether a message is Hindi (Devanagari), English, or Hinglish (Roman Hindi)
+function detectLanguage(text: string): 'hindi' | 'english' | 'hinglish' {
+  const devanagariChars = (text.match(/[\u0900-\u097F]/g) || []).length;
+  const latinChars = (text.match(/[a-zA-Z]/g) || []).length;
+  const totalChars = devanagariChars + latinChars;
+  if (totalChars === 0) return 'hinglish';
+  const devanagariRatio = devanagariChars / totalChars;
+  if (devanagariRatio > 0.5) return 'hindi';
+  const hinglishPatterns = /\b(kya|hai|hain|nahi|nahin|mujhe|mera|tera|aap|tum|hum|yeh|woh|karo|karni|chahiye|hua|hui|raha|rahi|bhi|aur|lekin|phir|abhi|jab|tab|kaisa|kaisi|theek|bilkul|accha|shukriya|dhanyawad|baat|kuch|sab|bahut|zyada|thoda|dono|pehle|baad|saath|ghar|kaam|din|raat|log|dost|bhai|didi|mama|papa)\b/i;
+  if (hinglishPatterns.test(text) && devanagariRatio < 0.3) return 'hinglish';
+  return 'english';
+}
+
 interface Message {
   role: 'user' | 'assistant';
   content: string;
@@ -137,29 +150,48 @@ const AILawyerChat = () => {
     setInput('');
     setLoading(true);
 
+    // Detect language from current message only, then inject tag into API payload
+    const detectedLang = detectLanguage(userMessage);
+    const langTag =
+      detectedLang === 'hindi'
+        ? '[LANGUAGE:HINDI] You MUST reply in Devanagari Hindi script only. No English words.'
+        : detectedLang === 'hinglish'
+        ? '[LANGUAGE:HINGLISH] You MUST reply in Hinglish — Roman script Hindi only. No Devanagari.'
+        : '[LANGUAGE:ENGLISH] You MUST reply in English only. No Hindi, no Devanagari.';
+
+    // Inject language tag directly into the last user message (overrides history bias)
+    const messagesWithLangTag = newMessages.map((m, idx) =>
+      idx === newMessages.length - 1 && m.role === 'user'
+        ? { ...m, content: `${langTag}\n\n${m.content}` }
+        : m
+    );
+
+    const BASE_SYSTEM_PROMPT =
+      "You are an expert AI Legal Consultant for Indian Women's rights. " +
+      "You provide clear, structured legal strategy, explain laws (DV Act, Section 498A, POCSO, etc.), " +
+      "and help users prepare for legal steps. " +
+      "\n\nFORMATTING RULES — always follow these:\n" +
+      "- Use ## for section headings (e.g. ## Your Legal Options)\n" +
+      "- Use **bold** for key legal terms and important points\n" +
+      "- Use numbered lists (1. 2. 3.) for steps or ordered actions\n" +
+      "- Use bullet lists (- item) for options, rights, or tips\n" +
+      "- Use --- to separate major sections\n" +
+      "- Keep paragraphs short (2-3 sentences max)\n" +
+      "- Never write a wall of unbroken text\n" +
+      "\nLANGUAGE RULES — ABSOLUTE:\n" +
+      "1. Devanagari Hindi input → reply ONLY in Devanagari Hindi\n" +
+      "2. English input → reply ONLY in English\n" +
+      "3. Hinglish input → reply ONLY in Hinglish (Roman script Hindi)\n" +
+      "NEVER switch language mid-response. Mirror the user exactly.\n" +
+      "\nAlways clarify you are an AI and not a substitute for a qualified lawyer.";
+
     try {
       const res = await fetch(`${getMainApiBase()}/chat/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_prompt:
-            "You are an expert AI Legal Consultant for Indian Women's rights. " +
-            "You provide clear, structured legal strategy, explain laws (DV Act, Section 498A, POCSO, etc.), " +
-            "and help users prepare for legal steps. " +
-            "\n\nFORMATTING RULES — always follow these:\n" +
-            "- Use ## for section headings (e.g. ## Your Legal Options)\n" +
-            "- Use **bold** for key legal terms and important points\n" +
-            "- Use numbered lists (1. 2. 3.) for steps or ordered actions\n" +
-            "- Use bullet lists (- item) for options, rights, or tips\n" +
-            "- Use --- to separate major sections\n" +
-            "- Keep paragraphs short (2-3 sentences max)\n" +
-            "- Never write a wall of unbroken text\n" +
-            "\nLANGUAGE RULES:\n" +
-            "- If user writes in English → reply in English only\n" +
-            "- If user writes in Hindi (Devanagari) → reply in Devanagari Hindi only\n" +
-            "- If user writes in Hinglish → reply in Hinglish only\n" +
-            "\nAlways clarify you are an AI and not a substitute for a qualified lawyer.",
-          messages: newMessages,
+          system_prompt: BASE_SYSTEM_PROMPT + '\n\n' + langTag,
+          messages: messagesWithLangTag,
         }),
       });
 
