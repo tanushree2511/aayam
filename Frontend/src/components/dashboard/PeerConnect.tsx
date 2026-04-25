@@ -38,6 +38,7 @@ const PeerConnect = () => {
 
   // ---------------- VOICE ---------------- //
   const startVoice = () => {
+    if (isListening) return;
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     if (!SpeechRecognition) return alert("Mic not supported");
 
@@ -45,11 +46,23 @@ const PeerConnect = () => {
     recognition.lang = 'ne-NP';
 
     recognition.onstart = () => setIsListening(true);
-    recognition.onresult = (e: any) =>
-      setText(prev => prev + " " + e.results[0][0].transcript);
+    recognition.onresult = (e: any) => {
+      if (e.results && e.results[0] && e.results[0][0]) {
+        setText(prev => prev + (prev ? " " : "") + e.results[0][0].transcript);
+      }
+    };
+    recognition.onerror = (e: any) => {
+      console.error("Speech error:", e.error);
+      setIsListening(false);
+    };
     recognition.onend = () => setIsListening(false);
 
-    recognition.start();
+    try {
+      recognition.start();
+    } catch (e) {
+      console.error(e);
+      setIsListening(false);
+    }
   };
 
   // ---------------- POST STORY ---------------- //
@@ -156,8 +169,8 @@ const PeerConnect = () => {
           <div className="flex gap-3">
             <Button
               onClick={startVoice}
-              variant="outline"
-              className="rounded-xl"
+              variant={isListening ? "destructive" : "outline"}
+              className={`rounded-xl ${isListening ? 'animate-pulse' : ''}`}
             >
               <Mic className="h-4 w-4" />
             </Button>

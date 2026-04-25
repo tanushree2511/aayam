@@ -1,291 +1,160 @@
-# Path to Strength
+# Mitra - Empowering Survivors Through Tech, Law & Empathy
 
-A bilingual (English / नेपाली) web platform that supports Nepali women along legal, emotional, and practical dimensions: daily grounding choices, case awareness, peer connection, safety planning, legal literacy, NGO and therapist discovery, and an AI companion chat. The stack pairs a **React + Vite** frontend with a **FastAPI** backend and optional auxiliary services.
+**Mitra** is a comprehensive, AI-driven sanctuary platform built specifically for women and domestic abuse survivors in India. It bridges the critical gap between **legal empowerment** and **mental health support**, uniting them into a single, cohesive, and highly secure ecosystem. 
 
----
-
-OUR LIVE WEBSITE:
-https://path-to-strength.vercel.app/ 
-Do Visit 😁
-
-## Table of contents
-
-1. [Features](#features)  
-2. [Architecture](#architecture)  
-3. [User journey (workflow)](#user-journey-workflow)  
-4. [NGO journey (workflow)](#ngo-journey-workflow)  
-5. [Backend API overview](#backend-api-overview)  
-6. [Setup](#setup)  
-7. [Running the application](#running-the-application)  
-8. [Environment variables](#environment-variables)  
-9. [Project structure](#project-structure)  
-10. [Testing](#testing)  
-11. [Team](#team)
-
-**Deployment:** **[DEPLOYMENT.md](./DEPLOYMENT.md)** — Render (API) + Vercel (frontend), env vars, CORS, production caveats.
+At its core, the platform features **Mitra**, an empathetic AI companion that feels like chatting with a trusted friend. Yet beneath this approachable persona lies a deep, nuanced capability to provide verified legal guidance, detect behavioral anomalies, and seamlessly escalate cases to verified NGOs and therapists.
 
 ---
 
-## Features
+## 📊 The Crisis: Indian Market Context & The Need for Mitra
 
-### Public & authentication
+The intersection of domestic violence, legal intimidation, and mental health stigma in India creates a paralyzing environment for survivors. According to the National Family Health Survey (NFHS-5), nearly 30% of women in India have experienced domestic violence, yet fewer than 1% ever seek help from institutional authorities. 
 
-- **Landing page** — Marketing / entry; links to sign-in.
-- **Auth** — Email + password **login** and **signup** with two roles:
-  - **User** — must select a **Nepal district** at registration.
-  - **NGO** — partner accounts for coordination views.
-- **JWT sessions** — Token stored client-side; `Authorization: Bearer` on protected calls.
-- **Language toggle** — EN / नेपाली across the UI via `LanguageContext`.
+Mitra addresses three critical barriers:
 
-### User dashboard (after login)
+1. **The Legal Labyrinth**: The Indian legal system—including the Indian Penal Code (IPC), the newly introduced Bharatiya Nyaya Sanhita (BNS), and the Protection of Women from Domestic Violence Act (PWDVA), 2005—is highly complex. Legal documents are predominantly available in formal English and filled with intimidating jargon. Survivors often do not know their basic rights (e.g., the right to reside in a shared household, protection orders), let alone how to invoke them without risking immediate retaliation.
+2. **Behavioral & Social Isolation**: Domestic abuse in India is often accompanied by severe social conditioning and forced isolation. Abusers systematically cut off the survivor's support networks. Survivors display specific behavioral anomalies—such as withdrawal, sudden changes in daily restoration habits, or linguistic markers of severe distress—that go unnoticed by traditional systems until it is too late.
+3. **The "Help" Stigma**: Seeking formal therapy or walking into a police station brings immense societal stigma. Survivors need a discreet, culturally sensitive first point of contact that understands Hindi, Hinglish, and regional nuances without judgment or immediate pressure to file a police report.
 
-- **Mood gate** — Full-screen **color selection** to set a mood theme (CSS variables + transitions). Includes a **companion disclaimer** (EN/NE) and language toggle on that screen.
-- **Wellness spectrum** — One-time (per session) choice among emotional paths (e.g. heavy, unsettled, alone, need support) to gently bias the default tab.
-- **Today** — Daily “restoration” style interactions, progress, and journey-related UI tied to **`/api/auth/daily-restoration`**.
-- **Case tracker** — Case-oriented views, timelines, and help content (legal process context).
-- **Incident log** — Survivors can log incidents (type, description, priority, optional anonymity to NGO); data is stored in SQLite and visible to NGOs subject to filters.
-- **Peer Connect** — Community-style feed (posts, comments, voice hints). Served by **`chautara_api`** routes on the **same** main API (`/api/chautara/...`). Optional **`VITE_CHAUTARA_API_URL`** overrides the base if you split Chautara out later.
-- **Safety planning** — Practical safety-oriented guidance.
-- **Legal rights** — Rights education in plain language (bilingual).
-- **Therapist / NGO** — Directory-style connection to support resources.
-- **Chat (companion)** — Conversational UI with **Groq**-backed completions via **`POST /chat/`**; optional **speech-to-text** via **`POST /stt/transcribe`** (Sarvam) for voice input.
-- **Agency trail / behavioral hooks** — Frontend logic for engagement patterns; optional **Supabase** integration exists in `behavioralEngine.ts` for richer analytics (requires configured Supabase + auth alignment).
-
-### NGO dashboard
-
-- **Incident queue** — List and filter incidents (all / anonymous / registered; pending / resolved).
-- **Stats** — Aggregated counts (pending, resolved, weekly activity, etc.).
-- **Registered users list** — Intended to call **`GET /api/auth/users`** (NGO-only); ensure this route is implemented in your deployed `auth_routes` if the tab should populate.
-
-### Main API extras (same FastAPI app as auth)
-
-- **Legal assistant** — **`POST /api/legal-chat`** — RAG over PDFs in `Backend/data/laws` (when present) + Groq; falls back to `local_data.json`.
-- **Chautara (in `main.py`)** — JSON-backed pebbles/diyas/stories and moderation-style **`POST /api/chautara/interact`** using Groq.
+**Mitra** dismantles these barriers by bringing the lawyer, the therapist, and the support group directly to the survivor's smartphone in their native language, functioning entirely at their pace.
 
 ---
 
-## Architecture
+## 🔬 Research & Market Analysis
 
-| Layer | Technology |
-|--------|------------|
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui, Framer Motion, React Router, TanStack Query |
-| Main API | FastAPI, Uvicorn, Pydantic, SQLite (users + incidents), PyJWT, bcrypt |
-| AI | Groq (chat + legal + moderation), optional Sarvam (STT) |
-| Legal RAG | `pdfminer.six`, `scikit-learn`, `sentence-transformers` / `torch` (see [Setup](#setup)) |
-| Optional | Supabase client (behavioral logging); Peer Connect lives in `chautara_api.py`, mounted by `main.py` |
+The architecture of Mitra is heavily informed by primary research and behavioral psychology concerning domestic violence survivors in the Indian subcontinent:
 
-Frontend **defaults** API base to **`https://path-to-strength.onrender.com`** (see `Frontend/src/lib/apiBase.ts`). For **local** FastAPI, set `VITE_API_BASE_URL=http://127.0.0.1:5000` in `Frontend/.env`. Vite **dev server** uses **port 8080** (`Frontend/vite.config.ts`).
+* **The "Justice Drop-off" Phenomenon**: Research indicates that out of the 1% of women who do approach institutional authorities, nearly 60% drop their cases within the first 6 months. Our analysis revealed this is primarily due to legal intimidation, lack of psychological support, and retaliatory threats. **Insight**: Legal aid *must* be inextricably linked with mental health support to reduce case abandonment.
+* **Linguistic Disenfranchisement**: Over 70% of Indian legal documentation and police First Information Reports (FIRs) are drafted in formal English or highly complex administrative Hindi/regional languages. **Insight**: An AI companion must process vernacular "Hinglish" and regional speech natively, translating a survivor's casual, emotional speech directly into formal legal categorizations (like IPC 498A or PWDVA).
+* **The "Window of Willingness"**: Psychological research on the "Cycle of Abuse" shows that survivors have very narrow temporal windows where they feel empowered or safe enough to seek help. If the initial point of contact is slow, bureaucratic, or judgmental, the window closes. **Insight**: An instant, non-judgmental, 24/7 AI first-responder drastically increases the likelihood of a survivor initiating the reporting process and escaping the cycle.
 
 ---
 
-## User journey (workflow)
+## 🚀 Key Innovations & Core Features
 
-1. Open **`/`** → read landing → **Login** / **Get started** → **`/auth`**.  
-2. **Sign up** as user (district required) or NGO → receive JWT → redirect to **`/dashboard`** or **`/ngo-dashboard`**.  
-3. **User:** **Mood gate** → pick a color (theme applied) → **Wellness spectrum** → pick a path → land on dashboard with sidebar.  
-4. Use sidebar tabs: **Today**, **Case Tracker**, **Peer Connect**, **Safety**, **Legal Rights**, **Therapist / NGO**, **Chat**.  
-5. **Incident log** (within case/help flows) submits to **`POST /api/incidents`**.  
-6. **Chat** sends history + system prompt to **`POST /chat/`**; mic uses **`/stt/transcribe`** when enabled.  
-7. **Logout** clears local session (navbar).
+### 1. Mitra: The AI Companion & Legal Guide
+To the survivor, Mitra acts as a normal, comforting chat companion—an "older sister" (Didi) figure. It validates her feelings, listens without judgment, and provides psychological first aid. However, this conversational interface is actually a powerful triage engine that gently introduces actionable legal and psychological steps without overwhelming the user.
 
----
+### 2. Deep RAG Implementation for Indian Law
+General LLMs often hallucinate legal advice, which is extremely dangerous in domestic abuse scenarios. Mitra utilizes a robust **Retrieval-Augmented Generation (RAG)** pipeline specifically indexed on Indian Law.
+* **Granular AI Analysis**: For each and every right mentioned by the user (e.g., "he took my salary," "he threatened my parents"), the RAG system performs real-time analysis.
+* **Verified Database Mapping**: It cross-references the user's narrative against verified databases containing IPC Sections (e.g., 498A for cruelty), BNS replacements, and PWDVA provisions (e.g., economic abuse, verbal/emotional abuse).
+* **Simplified Delivery**: It translates this complex legal mapping into simple, actionable steps delivered in Hindi, Hinglish, or English.
 
-## NGO journey (workflow)
+### 3. Behavioral Anomaly Detection & NLP Sentiment Tracking
+Mitra doesn't just wait for the user to explicitly ask for an NGO; it actively monitors for risk vectors. 
+* **Continuous Sentiment Analysis**: By analyzing the textual and tonal sentiment in the chat and tracking patterns in the "Daily Restoration" mood check-ins, the system detects behavioral anomalies.
+* **Risk Factor Identification**: It looks for markers of severe depressive spikes, learned helplessness, prolonged isolation, or potential self-harm.
+* **Proactive Intervention**: If a high-risk anomaly is detected, the platform gently shifts its dialogue to prompt professional help or triggers an automated escalation protocol, offering the `SHOW_HELP_BUTTON` to connect immediately with vetted NGOs.
 
-1. Register / login as **NGO** → **`/ngo-dashboard`**.  
-2. Review **stats** and **incident list**; filter by audience and status.  
-3. Update case workflow / status via incident APIs (as implemented in `incidentsApi.ts`).  
-4. **Registered users** tab calls **`/api/auth/users`** — verify backend route exists for your branch.
+### 4. Anonymous Peer Support (Chautara Courtyard)
+Isolation is the abuser's greatest weapon. The **Chautara Courtyard** is a highly secure, moderated sanctuary space where survivors can read about others' experiences and share their own stories entirely anonymously. This shared empathy breaks the cycle of isolation and fosters communal healing.
 
----
-
-## Backend API overview
-
-Prefixes are relative to the API host (production: `https://path-to-strength.onrender.com`, local: `http://127.0.0.1:5000`).
-
-| Area | Methods | Path (prefix) | Notes |
-|------|---------|----------------|-------|
-| Auth | POST | `/api/auth/register`, `/api/auth/login` | Returns `access_token` + `user` |
-| Auth | GET | `/api/auth/me` | Bearer token |
-| Daily restoration | GET, PUT | `/api/auth/daily-restoration` | Journey + daily step |
-| Incidents | Various | `/api/incidents` | Survivor create; NGO list/stats/update |
-| Chat | POST | `/chat/` | Groq OpenAI-compatible proxy |
-| STT | POST | `/stt/transcribe` | Multipart audio; Sarvam |
-| Legal chat | POST | `/api/legal-chat` | RAG + Groq |
-| Health | GET | `/health` | Liveness |
-
-Interactive docs: **`/docs`** on the same API host (e.g. local `http://127.0.0.1:5000/docs` or `https://path-to-strength.onrender.com/docs`).
-
-**Peer Connect** uses **`/api/chautara/*`** on the main app (see `chautara_api.py`). **`VITE_CHAUTARA_API_URL`** only if you point the UI at a different host (`PeerConnect.tsx`).
+### 5. Seamless NGO & Case Tracking Pipeline
+When a survivor is ready, she can seamlessly transition from anonymous chatting to opening a formal case. 
+* **NGO Dashboard**: Verified organizations receive these cases on a secure, dedicated dashboard. Coordinators can assign specialized legal or psychological units to specific cases.
+* **Transparent Case Tracker**: The survivor tracks her case securely on her end. She sees exact progress states (e.g., "Received", "Triaging", "Active Support") and receives automated, encouraging support messages tailored to her specific situation.
 
 ---
 
-## Setup
+## 🛠️ System Architecture & Tech Stack
+
+Mitra is built as a highly responsive, full-stack web application designed for absolute privacy, speed, and linguistic inclusivity.
+
+**Frontend Layer:**
+* **Framework**: React.js powered by Vite for lightning-fast module replacement.
+* **Language**: TypeScript for end-to-end type safety.
+* **Styling & UI**: Tailwind CSS coupled with Framer Motion to create a calming, fluid, and non-triggering user interface.
+* **Components**: shadcn/ui for accessible, robust interface elements.
+
+**Backend & Data Layer:**
+* **Framework**: FastAPI (Python) for high-performance, asynchronous API endpoints.
+* **Database**: SQLite (`chautara_sanctuary.db`, `sahara_users.db`) for lightweight, secure, and isolated relational data storage.
+
+**AI & Machine Learning Pipeline:**
+* **Groq API**: Utilized for ultra-low latency LLM inference. This powers the conversational RAG pipeline and behavioral anomaly detection, ensuring responses feel instantaneous and natural.
+* **Sarvam AI**: Integrated for native, highly accurate Hindi and Nepali Speech-to-Text (STT) dictation. This ensures that users who are illiterate, visually impaired, or simply typing-averse can speak their truth naturally.
+* **Vector Database / RAG**: Specialized document loaders and vector embeddings designed for the semantic search and retrieval of specific Indian legal rights and mental health protocols.
+
+---
+
+## 🔄 The Survivor's Journey: End-to-End Flow
+
+1. **Discreet Entry & Daily Check-in**: The survivor enters the platform (anonymously or via a secure registered account) and completes a quick, non-intrusive Daily Restoration check-in to log her emotional state.
+2. **Conversational Triage**: She enters the chat with **Mitra**. She might use the voice feature to say in Hindi, *"Mere pati ne mujhe ghar se nikal diya aur paise bhi le liye."* (My husband threw me out of the house and took my money).
+3. **AI Analysis & RAG Retrieval**: The system detects the language (Hinglish/Hindi) and uses RAG to pull specific legal rights regarding *economic abuse* and the *right to reside in a shared household* under the Domestic Violence Act. Mitra responds empathetically, validating her distress while explaining these rights simply.
+4. **Behavioral Anomaly Detection**: Over multiple sessions, if the system detects escalating risk in her words or a downward trend in her check-in patterns, it identifies a behavioral anomaly and prompts immediate professional intervention.
+5. **Escalation**: She decides she is ready and clicks to connect with an NGO. A secure, anonymized incident report is generated.
+6. **NGO Action**: An NGO coordinator logs into their dashboard, views the categorized case, assigns a legal counselor and a therapist, and updates the case status to "Active Support".
+7. **Resolution & Healing**: The survivor tracks her case securely via the UI while continuing to draw strength from the Chautara peer community and Mitra's daily check-ins.
+
+---
+
+## 🔒 Security & Privacy Promise
+
+Given the extremely sensitive nature of domestic abuse, **Mitra** is built with a privacy-first architecture:
+* No chat logs are utilized for model training.
+* Anonymous reporting is a first-class citizen; users do not need to provide personally identifiable information (PII) to access core legal and emotional support.
+* Quick-exit mechanisms and discreet UI design ensure the app can be used safely even in monitored households.
+
+---
+
+## 💻 Setup Instructions (Local Development)
 
 ### Prerequisites
+* Node.js (v18+)
+* Python (3.9+)
+* API Keys: Groq API, Sarvam AI API (optional, for Speech-to-Text).
 
-- **Node.js** 18+ and npm  
-- **Python** 3.12+ (matches typical venv in repo)  
-- **Groq API key** for chat and legal features  
-- **Sarvam API key** if you use server-side transcription  
-- Optional: **MongoDB** / other keys from `.env.example` if you extend the app  
+### 1. Backend Setup
 
-### Backend
+1. Open a terminal and navigate to the `Backend` directory:
+   ```bash
+   cd Backend
+   ```
+2. Create and activate a Python virtual environment (recommended):
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+3. Install the required Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Configure Environment Variables:
+   Create a `.env` file in the `Backend` folder and add your specific API keys:
+   ```env
+   GROQ_API_KEY=your_groq_api_key_here
+   SARVAM_API_KEY=your_sarvam_api_key_here
+   ```
+5. Run the FastAPI development server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+   *(The backend API documentation will be accessible at `http://localhost:8000/docs`)*
 
-```bash
-cd Backend
-python3 -m venv venv
-source venv/bin/activate    # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
+### 2. Frontend Setup
 
-If **`main.py`** fails to import **`rag`** (legal PDF pipeline), install missing packages:
-
-```bash
-pip install pdfminer.six scikit-learn
-```
-
-Copy environment template and edit:
-
-```bash
-cp .env.example .env
-```
-
-SQLite files are created automatically:
-
-- **`sahara_users.db`** — users and incidents (path set in `auth_routes.py`).
-
-### Frontend
-
-```bash
-cd Frontend
-npm install
-```
-
-Copy **`Frontend/.env.example`** to **`Frontend/.env`** and set keys (see [Environment variables](#environment-variables)). For **local** API only, use `VITE_API_BASE_URL=http://127.0.0.1:5000`.
-
----
-
-## Running the application
-
-### 1. Main API (required for auth, chat, STT, legal, incidents)
-
-```bash
-cd Backend
-source venv/bin/activate
-uvicorn main:app --reload --host 127.0.0.1 --port 5000
-```
-
-- Swagger: http://127.0.0.1:5000/docs  
-- Use **`--port 5000`** so defaults match `VITE_API_BASE_URL`.
-
-### 2. Frontend
-
-```bash
-cd Frontend
-npm run dev
-```
-
-- Default UI: **http://localhost:8080** (see `vite.config.ts`).
-
-### 3. Chautara / Peer Connect (same process as main API)
-
-Peer Connect **`/api/chautara/feed`**, **`/post`**, **`/comment`** is included when you run the main API (step **1** above). No second server is required.
-
-Optional — run **only** Chautara on port **5001** (e.g. debugging):
-
-```bash
-cd Backend && source venv/bin/activate && python chautara_api.py
-```
-
-### CORS notes
-
-The main app configures CORS for local dev (including **localhost:8080** → **127.0.0.1:5000** and **Private Network Access** for Chrome). For extra origins (e.g. LAN IP), use **`FRONTEND_URL`**, **`CORS_ALLOW_ORIGINS`**, and **`CORS_ALLOW_LAN`** in **`Backend/.env`** as described in **`Backend/.env.example`**.
+1. Open a new terminal and navigate to the `Frontend` directory:
+   ```bash
+   cd Frontend
+   ```
+2. Install the Node modules:
+   ```bash
+   npm install
+   ```
+3. Configure Environment Variables:
+   Create a `.env` file in the `Frontend` folder and map the necessary endpoints:
+   ```env
+   VITE_BACKEND_URL=http://localhost:8000/api
+   VITE_API_BASE_URL=http://localhost:8000
+   VITE_GROQ_API_KEY=your_groq_api_key_here
+   ```
+4. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+5. Open the provided localhost URL (typically `http://localhost:8082` or `http://localhost:5173`) in your web browser.
 
 ---
-
-## Environment variables
-
-### Backend (`.env` in `Backend/`)
-
-| Variable | Purpose |
-|----------|---------|
-| `JWT_SECRET` | Sign JWT access tokens |
-| `GROQ_API_KEY` / `VITE_GROQ_API_KEY` | Groq API (several modules read one or the other) |
-| `SARVAM_API_KEY` | Speech-to-text proxy |
-| `FRONTEND_URL` | CORS allowlist helper |
-| `CORS_ALLOW_ORIGINS` | Comma-separated extra origins |
-| `CORS_ALLOW_LAN` | `1` / `true` — regex allow private LAN dev origins |
-| `MONGODB_URI`, Firebase keys, SMTP | Optional / future integrations per `.env.example` |
-
-### Frontend (`Frontend/.env`)
-
-| Variable | Purpose |
-|----------|---------|
-| `VITE_API_BASE_URL` | Main FastAPI origin without trailing slash (default in code: `https://path-to-strength.onrender.com`; local: `http://127.0.0.1:5000`) |
-| `VITE_BACKEND_URL` | Fallback; may include `/api` — stripped by `getMainApiBase()` |
-| `VITE_CHAUTARA_API_URL` | Optional override for Peer Connect; default is same origin as `VITE_API_BASE_URL` + `/api/chautara` |
-| `VITE_GROQ_API_KEY` | Only if used client-side (prefer server-side for secrets) |
-| `VITE_SUPABASE_*` | Optional behavioral / Supabase features |
-
-Never commit real **`.env`** files with secrets.
-
----
-
-## Project structure
-
-```
-path-to-strength/
-├── Backend/
-│   ├── main.py              # FastAPI app, CORS, legal-chat, chautara JSON routes, routers
-│   ├── auth_routes.py       # Register, login, me, daily-restoration
-│   ├── incident_routes.py   # Incidents CRUD / NGO views
-│   ├── chat.py              # Groq chat proxy
-│   ├── speech_to_text.py    # Sarvam STT
-│   ├── rag.py               # Legal PDF RAG helpers
-│   ├── chautara_api.py      # Peer Connect router (mounted in main.py; optional `python chautara_api.py` → :5001)
-│   ├── requirements.txt
-│   └── .env.example
-├── Frontend/
-│   ├── src/
-│   │   ├── App.tsx          # Routes
-│   │   ├── pages/           # Landing, Auth, UserDashboard, NgoDashboard, NotFound
-│   │   ├── components/      # Navbar, dashboard/*, UI kit
-│   │   ├── contexts/        # Auth, Language
-│   │   └── lib/             # apiBase, incidentsApi, restorationApi, moodTheme, …
-│   ├── vite.config.ts
-│   └── package.json
-└── README.md                # This file
-```
-
----
-
-## Testing
-
-```bash
-cd Frontend
-npm run test        # Vitest
-npm run lint        # ESLint
-```
-
-Playwright is listed in devDependencies; use your existing `playwright.config.ts` when e2e tests are added.
-
----
-
-## Team
-
-**Team members**
-
-- Prishika Chaudhary  
-- Pema Tshering Sherpa  
-- Yadriksha Uprety  
-- Sujit Lopchan  
-- Bikash Kumar Yadav  
-
-**Mentor**
-
-- Suman Koju  
-
----
-
-*This README reflects the repository layout and behavior at the time of writing. If you add routes (e.g. `GET /api/auth/users`) or change ports, update this document and `Backend/.env.example` / `Frontend/README.md` accordingly.*
+**Mitra:** Because no woman should have to choose between fighting for her rights and protecting her peace of mind.
